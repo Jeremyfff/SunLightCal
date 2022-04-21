@@ -1,4 +1,4 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
 
@@ -6,70 +6,74 @@ using UnityEngine;
 public class CalculateStucture : MonoBehaviour
 {
     [SerializeField] private bool DrawGizmos = true;
-    [SerializeField] private float È«¾ÖGizmo´óĞ¡ = 0.005f;
-    [SerializeField] private Color »ù´¡GizmoÑÕÉ« = Color.white;
-    [SerializeField] private Color Òş²ØGizmoÑÕÉ« = Color.grey;
-    [SerializeField] private Color µç»úGizmoÑÕÉ« = Color.red;
-    [SerializeField] private Color ¸ßÁÁGizmoÑÕÉ« = Color.yellow;
-    [SerializeField] private Transform ´¹Ö±µç»ú¹ìµÀStart;
-    [SerializeField] private Transform ´¹Ö±µç»ú¹ìµÀEnd;
+    [SerializeField] private float å…¨å±€Gizmoå¤§å° = 0.005f;
+    [SerializeField] private Color åŸºç¡€Gizmoé¢œè‰² = Color.white;
+    [SerializeField] private Color éšè—Gizmoé¢œè‰² = Color.grey;
+    [SerializeField] private Color ç”µæœºGizmoé¢œè‰² = Color.red;
+    [SerializeField] private Color é«˜äº®Gizmoé¢œè‰² = Color.yellow;
+    [SerializeField] private Transform å‚ç›´ç”µæœºè½¨é“Start;
+    [SerializeField] private Transform å‚ç›´ç”µæœºè½¨é“End;
     [Range(0f,1f)]
-    [SerializeField] private float ´¹Ö±µç»úÎ»ÖÃ°Ù·Ö±È;
+    [SerializeField] private float å‚ç›´ç”µæœºä½ç½®ç™¾åˆ†æ¯”;
     
+
+
+
+
 
     [SerializeField] private Transform RootPos;
 
-    [SerializeField] private float ¸ù²¿ÓĞĞ§³¤¶È;
-    [SerializeField] private float ¸ù²¿Á¬¸Ë³¤¶È;
-    [SerializeField] private bool ¸ù²¿Á¬¸Ë·­×ª;
-    [SerializeField] private float ¸ù²¿ÖĞÖáÓë¸ù²¿µç»úÖĞÖáÖ®¼äµÄÆ«ÒÆ¾àÀë;
-    [SerializeField] private bool ¸ù²¿µç»úÎ»ÖÃ·­×ª;
-    [SerializeField] private float ¸ù²¿µç»ú¾àÀërootStartµÄ¾àÀë;
-    [SerializeField] private float ¸ù²¿µç»ú¹ìµÀ³¤¶È;
+    [SerializeField] private float æ ¹éƒ¨æœ‰æ•ˆé•¿åº¦;
+    [SerializeField] private float æ ¹éƒ¨è¿æ†é•¿åº¦;
+    [SerializeField] private bool æ ¹éƒ¨è¿æ†ç¿»è½¬;
+    [SerializeField] private float æ ¹éƒ¨ä¸­è½´ä¸æ ¹éƒ¨ç”µæœºä¸­è½´ä¹‹é—´çš„åç§»è·ç¦»;
+    [SerializeField] private bool æ ¹éƒ¨ç”µæœºä½ç½®ç¿»è½¬;
+    [SerializeField] private float æ ¹éƒ¨ç”µæœºè·ç¦»rootStartçš„è·ç¦»;
+    [SerializeField] private float æ ¹éƒ¨ç”µæœºè½¨é“é•¿åº¦;
     [Range(0.0f,1.0f)]
-    [SerializeField] private float ¸ù²¿µç»úÎ»ÖÃ°Ù·Ö±È;
-    [SerializeField] private float ¸ù²¿µç»úÁ¬¸Ë³¤¶È;
-    [SerializeField] private bool ¸ù²¿µç»úÁ¬¸Ë·­×ª;
+    [SerializeField] private float æ ¹éƒ¨ç”µæœºä½ç½®ç™¾åˆ†æ¯”;
+    [SerializeField] private float æ ¹éƒ¨ç”µæœºè¿æ†é•¿åº¦;
+    [SerializeField] private bool æ ¹éƒ¨ç”µæœºè¿æ†ç¿»è½¬;
 
-    [SerializeField] private float µÚÒ»Ö¸½Ú¿ªÊ¼Î»ÖÃZÆ«ÒÆ;
-    [SerializeField] private float µÚÒ»Ö¸½Ú¿ªÊ¼Î»ÖÃYÆ«ÒÆ;
-    //ÒÔÉÏÁ½¸öÆ«ÒÆ¶¼ÊÇ»ùÓÚrootµÄ×ø±êÏµÀ´µÄ£¬ÊÇÏà¶ÔÓÚrootEndµÄÆ«ÒÆ
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚å¼€å§‹ä½ç½®Zåç§»;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚å¼€å§‹ä½ç½®Yåç§»;
+    //ä»¥ä¸Šä¸¤ä¸ªåç§»éƒ½æ˜¯åŸºäºrootçš„åæ ‡ç³»æ¥çš„ï¼Œæ˜¯ç›¸å¯¹äºrootEndçš„åç§»
 
-    [SerializeField] private float Ö¸½Ú½Úµã1ÓĞĞ§°ë¾¶;
-    [SerializeField] private float µÚÒ»Ö¸½ÚÓëlink1End¼Ğ½Ç;
-    [SerializeField] private float µÚÒ»Ö¸½Ú³¤¶È;
-    [SerializeField] private float µÚÒ»Ö¸½ÚÁ¬¸Ë³¤¶È;
+    [SerializeField] private float æŒ‡èŠ‚èŠ‚ç‚¹1æœ‰æ•ˆåŠå¾„;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚ä¸link1Endå¤¹è§’;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚é•¿åº¦;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚è¿æ†é•¿åº¦;
 
-    [SerializeField] private float Link2StartµÄ½Ç¶ÈÎ»ÖÃ;
-    [SerializeField] private float Ö¸½Ú½Úµã2ÓĞĞ§°ë¾¶;
-    [SerializeField] private float µÚ¶şÖ¸½ÚÓëlink2End¼Ğ½Ç;
-    [SerializeField] private float µÚ¶şÖ¸½Ú³¤¶È;
-    [SerializeField] private float µÚ¶şÖ¸½ÚÁ¬¸Ë³¤¶È;
+    [SerializeField] private float Link2Startçš„è§’åº¦ä½ç½®;
+    [SerializeField] private float æŒ‡èŠ‚èŠ‚ç‚¹2æœ‰æ•ˆåŠå¾„;
+    [SerializeField] private float ç¬¬äºŒæŒ‡èŠ‚ä¸link2Endå¤¹è§’;
+    [SerializeField] private float ç¬¬äºŒæŒ‡èŠ‚é•¿åº¦;
+    [SerializeField] private float ç¬¬äºŒæŒ‡èŠ‚è¿æ†é•¿åº¦;
 
-    [SerializeField] private float Link3StartµÄ½Ç¶ÈÎ»ÖÃ;
-    [SerializeField] private float Ö¸½Ú½Úµã3ÓĞĞ§°ë¾¶;
-    [SerializeField] private float µÚÈıÖ¸½ÚÓëlink3End¼Ğ½Ç;
-    [SerializeField] private float µÚÈıÖ¸½Ú³¤¶È;
-    [SerializeField] private float µÚÈıÖ¸½ÚÁ¬¸Ë³¤¶È;
-
-
-    [SerializeField] private float µÚÒ»Ö¸½Ú·´Éä°åÁ¬¸ËÆ«ÒÆ¾àÀë;
-    [SerializeField] private float µÚÒ»Ö¸½Ú·´Éä°åÁ¬¸Ë³¤¶È;
-    [SerializeField] private float µÚÒ»Ö¸½Ú·´Éä°å³¤¶È;
+    [SerializeField] private float Link3Startçš„è§’åº¦ä½ç½®;
+    [SerializeField] private float æŒ‡èŠ‚èŠ‚ç‚¹3æœ‰æ•ˆåŠå¾„;
+    [SerializeField] private float ç¬¬ä¸‰æŒ‡èŠ‚ä¸link3Endå¤¹è§’;
+    [SerializeField] private float ç¬¬ä¸‰æŒ‡èŠ‚é•¿åº¦;
+    [SerializeField] private float ç¬¬ä¸‰æŒ‡èŠ‚è¿æ†é•¿åº¦;
 
 
-    [SerializeField] private float µÚ¶şÖ¸½Ú·´Éä°åÁ¬¸Ë³¤¶È;
-    [SerializeField] private float µÚ¶şÖ¸½Ú·´Éä°å³¤¶È;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿è¿æ†åç§»è·ç¦»;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿è¿æ†é•¿åº¦;
+    [SerializeField] private float ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿é•¿åº¦;
 
-    [SerializeField] private float µÚÈıÖ¸½Ú·´Éä°åÁ¬¸ËÆ«ÒÆ¾àÀë;
-    [SerializeField] private float µÚÈıÖ¸½Ú·´Éä°åÁ¬¸Ë³¤¶È;
-    [SerializeField] private float µÚÈıÖ¸½Ú·´Éä°å³¤¶È;
+
+    [SerializeField] private float ç¬¬äºŒæŒ‡èŠ‚åå°„æ¿è¿æ†é•¿åº¦;
+    [SerializeField] private float ç¬¬äºŒæŒ‡èŠ‚åå°„æ¿é•¿åº¦;
+
+    [SerializeField] private float ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿è¿æ†åç§»è·ç¦»;
+    [SerializeField] private float ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿è¿æ†é•¿åº¦;
+    [SerializeField] private float ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿é•¿åº¦;
 
     private bool buildError = false;
 
-    [SerializeField] private Transform PVµ×²¿;
-    [SerializeField] private Transform PV¶¥²¿;
-    [SerializeField] private float PV¿í¶È;
+    [SerializeField] private Transform PVåº•éƒ¨;
+    [SerializeField] private Transform PVé¡¶éƒ¨;
+    [SerializeField] private float PVå®½åº¦;
 
     [SerializeField] private bool calReflection;
 
@@ -108,7 +112,7 @@ public class CalculateStucture : MonoBehaviour
             Handles.Label(motor2Pos, "motor2Pos");
 
 
-            //¸ü¸Äfeatures
+            //æ›´æ”¹features
 
             var fingle1Start = DrawFingle1Start(rootStart, rootEnd);
             Handles.Label(fingle1Start, "fingle1Start");
@@ -166,7 +170,7 @@ public class CalculateStucture : MonoBehaviour
             
             //-------------------------------------------------
 
-            //ÊÓ¾õĞ§¹û
+            //è§†è§‰æ•ˆæœ
             var p_x = new Vector3(1, 0, 0);
             var n_x = new Vector3(-1, 0, 0);
             var pt_A1 = board1Start + n_x;
@@ -215,7 +219,7 @@ public class CalculateStucture : MonoBehaviour
                 Vector3[] pts_C = { pt_C1, pt_C2, pt_C3, pt_C4 };
                 var castPoints_C = DrawLightCast(sunDir, pts_C, PV_Plane);
 
-                CalIntersectArea(castPoints_A, PV¶¥²¿.position,PVµ×²¿.position);
+                CalIntersectArea(castPoints_A, PVé¡¶éƒ¨.position,PVåº•éƒ¨.position);
 
 
 
@@ -239,12 +243,12 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawMotor1() {
 
-        var motorPos = Vector3.Lerp(´¹Ö±µç»ú¹ìµÀStart.position, ´¹Ö±µç»ú¹ìµÀEnd.position, ´¹Ö±µç»úÎ»ÖÃ°Ù·Ö±È);
+        var motorPos = Vector3.Lerp(å‚ç›´ç”µæœºè½¨é“Start.position, å‚ç›´ç”µæœºè½¨é“End.position, å‚ç›´ç”µæœºä½ç½®ç™¾åˆ†æ¯”);
         if (DrawGizmos) {
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
-            Gizmos.DrawLine(´¹Ö±µç»ú¹ìµÀStart.position, ´¹Ö±µç»ú¹ìµÀEnd.position);
-            Gizmos.color = µç»úGizmoÑÕÉ«;
-            Gizmos.DrawSphere(motorPos, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
+            Gizmos.DrawLine(å‚ç›´ç”µæœºè½¨é“Start.position, å‚ç›´ç”µæœºè½¨é“End.position);
+            Gizmos.color = ç”µæœºGizmoé¢œè‰²;
+            Gizmos.DrawSphere(motorPos, å…¨å±€Gizmoå¤§å°);
         }
 
         return motorPos;
@@ -252,20 +256,20 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawRoot(Vector3 Motor1Pos) {
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(RootPos.position + Vector3.left * 10, RootPos.position + Vector3.right * 10);
-            Gizmos.DrawSphere(RootPos.position, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(RootPos.position, å…¨å±€Gizmoå¤§å°);
         }
 
         var point1 = Motor1Pos;
         var point2 = RootPos.position;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, ¸ù²¿Á¬¸Ë³¤¶È, ¸ù²¿ÓĞĞ§³¤¶È, ¸ù²¿Á¬¸Ë·­×ª);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, æ ¹éƒ¨è¿æ†é•¿åº¦, æ ¹éƒ¨æœ‰æ•ˆé•¿åº¦, æ ¹éƒ¨è¿æ†ç¿»è½¬);
 
         if (DrawGizmos) {
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(point1, point3);
             Gizmos.DrawLine(point2, point3);
-            Gizmos.DrawSphere(point3, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(point3, å…¨å±€Gizmoå¤§å°);
         }
 
         return point3;
@@ -273,22 +277,22 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawMotor2(Vector3 rootStart,Vector3 rootEnd) {
         Vector3 rootDir = rootEnd - rootStart;
-        Vector3 shiftDir = GetVertical(rootDir, ¸ù²¿µç»úÎ»ÖÃ·­×ª);
-        shiftDir = shiftDir.normalized * ¸ù²¿ÖĞÖáÓë¸ù²¿µç»úÖĞÖáÖ®¼äµÄÆ«ÒÆ¾àÀë;
+        Vector3 shiftDir = GetVertical(rootDir, æ ¹éƒ¨ç”µæœºä½ç½®ç¿»è½¬);
+        shiftDir = shiftDir.normalized * æ ¹éƒ¨ä¸­è½´ä¸æ ¹éƒ¨ç”µæœºä¸­è½´ä¹‹é—´çš„åç§»è·ç¦»;
         
-        var motor2Start = rootStart + shiftDir + rootDir.normalized * ¸ù²¿µç»ú¾àÀërootStartµÄ¾àÀë;
-        var motor2End = motor2Start + rootDir.normalized * ¸ù²¿µç»ú¹ìµÀ³¤¶È;
+        var motor2Start = rootStart + shiftDir + rootDir.normalized * æ ¹éƒ¨ç”µæœºè·ç¦»rootStartçš„è·ç¦»;
+        var motor2End = motor2Start + rootDir.normalized * æ ¹éƒ¨ç”µæœºè½¨é“é•¿åº¦;
 
         if (DrawGizmos) {
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
-            Gizmos.DrawLine(motor2Start, motor2End);//µç»ú¿ÉÒÆ¶¯·¶Î§µÄline
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
+            Gizmos.DrawLine(motor2Start, motor2End);//ç”µæœºå¯ç§»åŠ¨èŒƒå›´çš„line
         }
 
-        var motor2Pos = Vector3.Lerp(motor2Start, motor2End, ¸ù²¿µç»úÎ»ÖÃ°Ù·Ö±È);
+        var motor2Pos = Vector3.Lerp(motor2Start, motor2End, æ ¹éƒ¨ç”µæœºä½ç½®ç™¾åˆ†æ¯”);
 
         if (DrawGizmos) {
-            Gizmos.color = µç»úGizmoÑÕÉ«;
-            Gizmos.DrawSphere(motor2Pos, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = ç”µæœºGizmoé¢œè‰²;
+            Gizmos.DrawSphere(motor2Pos, å…¨å±€Gizmoå¤§å°);
         }
 
 
@@ -299,13 +303,13 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawFingle1Start(Vector3 rootStart,Vector3 rootEnd) {
         var Zdir = (rootEnd - rootStart).normalized;
         var Ydir = GetVertical(Zdir, false).normalized;
-        Zdir *= µÚÒ»Ö¸½Ú¿ªÊ¼Î»ÖÃZÆ«ÒÆ;
-        Ydir *= µÚÒ»Ö¸½Ú¿ªÊ¼Î»ÖÃYÆ«ÒÆ;
+        Zdir *= ç¬¬ä¸€æŒ‡èŠ‚å¼€å§‹ä½ç½®Zåç§»;
+        Ydir *= ç¬¬ä¸€æŒ‡èŠ‚å¼€å§‹ä½ç½®Yåç§»;
 
         var result = rootEnd + Zdir + Ydir;
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
-            Gizmos.DrawSphere(result, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
+            Gizmos.DrawSphere(result, å…¨å±€Gizmoå¤§å°);
             Gizmos.DrawLine(result, rootEnd);
         }
         return result;
@@ -316,13 +320,13 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawLink1(Vector3 motor2Pos,Vector3 rootEnd) {
         var point1 = motor2Pos;
         var point2 = rootEnd;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, ¸ù²¿µç»úÁ¬¸Ë³¤¶È, Ö¸½Ú½Úµã1ÓĞĞ§°ë¾¶, ¸ù²¿µç»úÁ¬¸Ë·­×ª);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, æ ¹éƒ¨ç”µæœºè¿æ†é•¿åº¦, æŒ‡èŠ‚èŠ‚ç‚¹1æœ‰æ•ˆåŠå¾„, æ ¹éƒ¨ç”µæœºè¿æ†ç¿»è½¬);
 
         if (DrawGizmos) {
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(point1, point3);
             Gizmos.DrawLine(point2, point3);
-            Gizmos.DrawSphere(point3, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(point3, å…¨å±€Gizmoå¤§å°);
         }
 
 
@@ -331,8 +335,8 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawNode1(Vector3 center,Vector3 link1End) {
         if (DrawGizmos) {
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
-            Gizmos.DrawWireSphere(center, Ö¸½Ú½Úµã1ÓĞĞ§°ë¾¶);
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
+            Gizmos.DrawWireSphere(center, æŒ‡èŠ‚èŠ‚ç‚¹1æœ‰æ•ˆåŠå¾„);
         }
 
 
@@ -347,7 +351,7 @@ public class CalculateStucture : MonoBehaviour
             dA = -dA;
         }
 
-        var dB = µÚÒ»Ö¸½ÚÓëlink1End¼Ğ½Ç * Mathf.PI / 180f + dA;
+        var dB = ç¬¬ä¸€æŒ‡èŠ‚ä¸link1Endå¤¹è§’ * Mathf.PI / 180f + dA;
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
         return newDir;
@@ -363,15 +367,15 @@ public class CalculateStucture : MonoBehaviour
         if (sinA < 0) {
             dA = -dA;
         }
-        var dB = Link2StartµÄ½Ç¶ÈÎ»ÖÃ * Mathf.PI / 180f + dA;
+        var dB = Link2Startçš„è§’åº¦ä½ç½® * Mathf.PI / 180f + dA;
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
 
-        var result = center + newDir * Ö¸½Ú½Úµã1ÓĞĞ§°ë¾¶;
+        var result = center + newDir * æŒ‡èŠ‚èŠ‚ç‚¹1æœ‰æ•ˆåŠå¾„;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
-            Gizmos.DrawSphere(result, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
+            Gizmos.DrawSphere(result, å…¨å±€Gizmoå¤§å°);
         }
 
 
@@ -380,10 +384,10 @@ public class CalculateStucture : MonoBehaviour
     }
 
     private Vector3 DrawFingle1(Vector3 start,Vector3 dir) {
-        var end = start + dir * µÚÒ»Ö¸½Ú³¤¶È;
+        var end = start + dir * ç¬¬ä¸€æŒ‡èŠ‚é•¿åº¦;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(start, end);
         }
 
@@ -393,13 +397,13 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawLink2(Vector3 link2Start,Vector3 fingle1End) {
         var point1 = link2Start;
         var point2 = fingle1End;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, µÚÒ»Ö¸½ÚÁ¬¸Ë³¤¶È, Ö¸½Ú½Úµã2ÓĞĞ§°ë¾¶, false);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, ç¬¬ä¸€æŒ‡èŠ‚è¿æ†é•¿åº¦, æŒ‡èŠ‚èŠ‚ç‚¹2æœ‰æ•ˆåŠå¾„, false);
 
         if (DrawGizmos) {
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(point1, point3);
             Gizmos.DrawLine(point2, point3);
-            Gizmos.DrawSphere(point3, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(point3, å…¨å±€Gizmoå¤§å°);
         }
 
 
@@ -408,8 +412,8 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawNode2(Vector3 center, Vector3 link2End) {
         if (DrawGizmos) {
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
-            Gizmos.DrawWireSphere(center, Ö¸½Ú½Úµã2ÓĞĞ§°ë¾¶);
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
+            Gizmos.DrawWireSphere(center, æŒ‡èŠ‚èŠ‚ç‚¹2æœ‰æ•ˆåŠå¾„);
         }
 
 
@@ -424,7 +428,7 @@ public class CalculateStucture : MonoBehaviour
             dA = -dA;
         }
 
-        var dB = µÚ¶şÖ¸½ÚÓëlink2End¼Ğ½Ç * Mathf.PI / 180f + dA;
+        var dB = ç¬¬äºŒæŒ‡èŠ‚ä¸link2Endå¤¹è§’ * Mathf.PI / 180f + dA;
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
         return newDir;
@@ -440,15 +444,15 @@ public class CalculateStucture : MonoBehaviour
         if (sinA < 0) {
             dA = -dA;
         }
-        var dB = Link3StartµÄ½Ç¶ÈÎ»ÖÃ * Mathf.PI / 180f + dA;
+        var dB = Link3Startçš„è§’åº¦ä½ç½® * Mathf.PI / 180f + dA;
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
 
-        var result = center + newDir * Ö¸½Ú½Úµã2ÓĞĞ§°ë¾¶;
+        var result = center + newDir * æŒ‡èŠ‚èŠ‚ç‚¹2æœ‰æ•ˆåŠå¾„;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
-            Gizmos.DrawSphere(result, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
+            Gizmos.DrawSphere(result, å…¨å±€Gizmoå¤§å°);
         }
 
 
@@ -457,10 +461,10 @@ public class CalculateStucture : MonoBehaviour
     }
 
     private Vector3 DrawFingle2(Vector3 start, Vector3 dir) {
-        var end = start + dir * µÚ¶şÖ¸½Ú³¤¶È;
+        var end = start + dir * ç¬¬äºŒæŒ‡èŠ‚é•¿åº¦;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(start, end);
         }
 
@@ -471,13 +475,13 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawLink3(Vector3 link3Start, Vector3 fingle2End) {
         var point1 = link3Start;
         var point2 = fingle2End;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, µÚ¶şÖ¸½ÚÁ¬¸Ë³¤¶È, Ö¸½Ú½Úµã3ÓĞĞ§°ë¾¶, false);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, ç¬¬äºŒæŒ‡èŠ‚è¿æ†é•¿åº¦, æŒ‡èŠ‚èŠ‚ç‚¹3æœ‰æ•ˆåŠå¾„, false);
 
         if (DrawGizmos) {
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(point1, point3);
             Gizmos.DrawLine(point2, point3);
-            Gizmos.DrawSphere(point3, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(point3, å…¨å±€Gizmoå¤§å°);
         }
 
 
@@ -486,8 +490,8 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawNode3(Vector3 center, Vector3 link3End) {
         if (DrawGizmos) {
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
-            Gizmos.DrawWireSphere(center, Ö¸½Ú½Úµã3ÓĞĞ§°ë¾¶);
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
+            Gizmos.DrawWireSphere(center, æŒ‡èŠ‚èŠ‚ç‚¹3æœ‰æ•ˆåŠå¾„);
         }
 
 
@@ -502,15 +506,15 @@ public class CalculateStucture : MonoBehaviour
             dA = -dA;
         }
 
-        var dB = µÚÈıÖ¸½ÚÓëlink3End¼Ğ½Ç * Mathf.PI / 180f + dA;
+        var dB = ç¬¬ä¸‰æŒ‡èŠ‚ä¸link3Endå¤¹è§’ * Mathf.PI / 180f + dA;
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
         return newDir;
     }
 
     private Vector3 DrawFingle3(Vector3 start, Vector3 dir) {
-        var end = start + dir * µÚÈıÖ¸½Ú³¤¶È;
-        Gizmos.color = »ù´¡GizmoÑÕÉ«;
+        var end = start + dir * ç¬¬ä¸‰æŒ‡èŠ‚é•¿åº¦;
+        Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
         Gizmos.DrawLine(start, end);
         return end;
     }
@@ -519,13 +523,13 @@ public class CalculateStucture : MonoBehaviour
     //----------------------------------------------------------------------
 
     private Vector3 DrawFingle2Rod(Vector3 fingle2Center,Vector3 fingle2Dir,bool flip) {
-        var rodDir = GetVertical(fingle2Dir, flip).normalized * µÚ¶şÖ¸½Ú·´Éä°åÁ¬¸Ë³¤¶È;
+        var rodDir = GetVertical(fingle2Dir, flip).normalized * ç¬¬äºŒæŒ‡èŠ‚åå°„æ¿è¿æ†é•¿åº¦;
         var rodEnd = fingle2Center + rodDir;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(fingle2Center, rodEnd);
-            Gizmos.DrawSphere(rodEnd, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(rodEnd, å…¨å±€Gizmoå¤§å°);
         }
 
         return fingle2Center + rodDir;
@@ -533,12 +537,12 @@ public class CalculateStucture : MonoBehaviour
     }
 
     private void DrawReflectBoard2(Vector3 rod2End, Vector3 fingle2Dir,out Vector3 boardStart,out Vector3 boardEnd) {
-        var halfDir = fingle2Dir.normalized * µÚ¶şÖ¸½Ú·´Éä°å³¤¶È * 0.5f;
+        var halfDir = fingle2Dir.normalized * ç¬¬äºŒæŒ‡èŠ‚åå°„æ¿é•¿åº¦ * 0.5f;
         boardStart = rod2End - halfDir;
         boardEnd = rod2End + halfDir;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(boardStart, boardEnd);
         }
 
@@ -546,32 +550,32 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawFingle1Rod(Vector3 fingle1Start,Vector3 fingle1End,Vector3 board2Start,bool flip) {
         var center = (fingle1Start + fingle1End)/ 2f;
-        var shiftDir = GetVertical((fingle1End - fingle1Start), true).normalized * µÚÒ»Ö¸½Ú·´Éä°åÁ¬¸ËÆ«ÒÆ¾àÀë;
+        var shiftDir = GetVertical((fingle1End - fingle1Start), true).normalized * ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿è¿æ†åç§»è·ç¦»;
 
         var point1 = center + shiftDir;
         var point2 = board2Start;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, µÚÒ»Ö¸½Ú·´Éä°åÁ¬¸Ë³¤¶È, µÚÒ»Ö¸½Ú·´Éä°å³¤¶È/2f, flip);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿è¿æ†é•¿åº¦, ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿é•¿åº¦/2f, flip);
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
-            Gizmos.DrawSphere(point1, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
+            Gizmos.DrawSphere(point1, å…¨å±€Gizmoå¤§å°);
             Gizmos.DrawLine(point1, center);
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(point1, point3);
             Gizmos.DrawLine(point2, point3);
-            Gizmos.DrawSphere(point3, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(point3, å…¨å±€Gizmoå¤§å°);
         }
 
 
-        return point3;//·µ»Ørod1end
+        return point3;//è¿”å›rod1end
 
     }
     private Vector3 DrawReflectBoard1(Vector3 board2Start,Vector3 rod1End) {
-        var dir = (rod1End - board2Start).normalized * µÚÒ»Ö¸½Ú·´Éä°å³¤¶È;
+        var dir = (rod1End - board2Start).normalized * ç¬¬ä¸€æŒ‡èŠ‚åå°„æ¿é•¿åº¦;
         var board1Start = board2Start + dir;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(board1Start, board2Start);
         }
 
@@ -583,32 +587,32 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawFingle3Rod(Vector3 fingle3Start,Vector3 fingle3End,Vector3 board2End,bool flip) {
         var center = (fingle3Start + fingle3End) / 2f;
-        var shiftDir = GetVertical((fingle3End - fingle3Start), true).normalized * µÚÈıÖ¸½Ú·´Éä°åÁ¬¸ËÆ«ÒÆ¾àÀë;
+        var shiftDir = GetVertical((fingle3End - fingle3Start), true).normalized * ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿è¿æ†åç§»è·ç¦»;
 
         var point1 = center + shiftDir;
         var point2 = board2End;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, µÚÈıÖ¸½Ú·´Éä°åÁ¬¸Ë³¤¶È, µÚÈıÖ¸½Ú·´Éä°å³¤¶È / 2f, flip);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿è¿æ†é•¿åº¦, ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿é•¿åº¦ / 2f, flip);
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
-            Gizmos.DrawSphere(point1, È«¾ÖGizmo´óĞ¡);
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
+            Gizmos.DrawSphere(point1, å…¨å±€Gizmoå¤§å°);
             Gizmos.DrawLine(point1, center);
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(point1, point3);
             Gizmos.DrawLine(point2, point3);
-            Gizmos.DrawSphere(point3, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(point3, å…¨å±€Gizmoå¤§å°);
         }
 
 
-        return point3;//·µ»Ørod3end
+        return point3;//è¿”å›rod3end
     }
 
     private Vector3 DrawReflectBoard3(Vector3 board2End,Vector3 rod3End) {
-        var dir = (rod3End - board2End).normalized * µÚÈıÖ¸½Ú·´Éä°å³¤¶È;
+        var dir = (rod3End - board2End).normalized * ç¬¬ä¸‰æŒ‡èŠ‚åå°„æ¿é•¿åº¦;
         var board3End = board2End + dir;
 
         if (DrawGizmos) {
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(board2End, board3End);
         }
 
@@ -620,9 +624,9 @@ public class CalculateStucture : MonoBehaviour
 
 
     private NGlbPlane DrawPV() {
-        var top = PV¶¥²¿.position;
-        var bot = PVµ×²¿.position;
-        var p_x = new Vector3(PV¿í¶È/2f, 0, 0);
+        var top = PVé¡¶éƒ¨.position;
+        var bot = PVåº•éƒ¨.position;
+        var p_x = new Vector3(PVå®½åº¦/2f, 0, 0);
         var pt_P1 = bot - p_x;
         var pt_P2 = bot + p_x;
         var pt_P3 = top + p_x;
@@ -630,9 +634,9 @@ public class CalculateStucture : MonoBehaviour
 
         if (DrawGizmos) {
             
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
             Gizmos.DrawLine(bot, top);
-            Gizmos.color = »ù´¡GizmoÑÕÉ«;
+            Gizmos.color = åŸºç¡€Gizmoé¢œè‰²;
             Gizmos.DrawLine(pt_P1, pt_P2);
             Gizmos.DrawLine(pt_P3, pt_P4);
             Gizmos.DrawLine(pt_P1, pt_P4);
@@ -653,7 +657,7 @@ public class CalculateStucture : MonoBehaviour
         var reflectDir = Reflect(SunLightDir, normal) * -1000f;
 
         if (DrawGizmos) {
-            Gizmos.color = Òş²ØGizmoÑÕÉ«;
+            Gizmos.color = éšè—Gizmoé¢œè‰²;
             for (int i = 0; i < 4; i++) {
                 Gizmos.DrawRay(new Ray(pts[i], reflectDir));
             }
@@ -672,7 +676,7 @@ public class CalculateStucture : MonoBehaviour
 
         //display
         if (!buildError && DrawGizmos) {
-            Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+            Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
             Gizmos.DrawLine(result[0], result[1]);
             Gizmos.DrawLine(result[1], result[2]);
             Gizmos.DrawLine(result[2], result[3]);
@@ -684,7 +688,7 @@ public class CalculateStucture : MonoBehaviour
     }
 
     private void CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot) {
-/*        //¹¹½¨ĞéÄâPVÆ½Ãæ
+/*        //æ„å»ºè™šæ‹ŸPVå¹³é¢
         var p_x = new Vector3(1, 0, 0);
         var p_z = new Vector3(0, 0, 1);
         var vituralPlane_top = new NGlbPlane(new NGlbVec3d(PV_top) , new NGlbVec3d(PV_top+p_x), new NGlbVec3d(PV_top+p_z));
@@ -706,27 +710,27 @@ public class CalculateStucture : MonoBehaviour
         Vector3 ln2_bot = castPoints[3];
 
 
-        Gizmos.color = ¸ßÁÁGizmoÑÕÉ«;
+        Gizmos.color = é«˜äº®Gizmoé¢œè‰²;
         if (hit1_top_isHit) {
             ln1_top = hit1_top.toVector3();
-            Gizmos.DrawSphere(ln1_top, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(ln1_top, å…¨å±€Gizmoå¤§å°);
         }
         if (hit1_bot_isHit) {
             ln1_bot = hit1_bot.toVector3();
-            Gizmos.DrawSphere(ln1_bot, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(ln1_bot, å…¨å±€Gizmoå¤§å°);
         }
         if (hit2_top_isHit) {
             ln2_top = hit2_top.toVector3();
-            Gizmos.DrawSphere(ln2_top, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(ln2_top, å…¨å±€Gizmoå¤§å°);
         }
         if (hit2_bot_isHit) {
             ln2_bot = hit2_bot.toVector3();
-            Gizmos.DrawSphere(ln2_bot, È«¾ÖGizmo´óĞ¡);
+            Gizmos.DrawSphere(ln2_bot, å…¨å±€Gizmoå¤§å°);
         }
 
 
         var height = Vector3.Distance(ln1_top, ln1_bot);
-        var »ù´¡CubeSize = new Vector3(0.1f, 0.1f, 0.1f);
+        var åŸºç¡€CubeSize = new Vector3(0.1f, 0.1f, 0.1f);
 */
 
 
@@ -766,23 +770,23 @@ public class CalculateStucture : MonoBehaviour
         var c2 = c;
         var dAB = GetDAngleOfAFromLength(a2, b2, c2);
         
-        //ÅĞ¶ÏP1 P2µÄÎ»ÖÃ¹ØÏµ£¬¸ü¸ÄdACµÄ·ûºÅºÍ´óĞ¡
+        //åˆ¤æ–­P1 P2çš„ä½ç½®å…³ç³»ï¼Œæ›´æ”¹dACçš„ç¬¦å·å’Œå¤§å°
         if (point1.z > point2.z) {
-            //Èç¹û1ÔÚ2µÄÓÒ·½
+            //å¦‚æœ1åœ¨2çš„å³æ–¹
             if (point1.y > point2.y) {
-                //Èç¹û1ÔÚ2µÄÉÏ·½
+                //å¦‚æœ1åœ¨2çš„ä¸Šæ–¹
                 dAB = dAB;
             } else {
-                //Èç¹û1ÔÚ2µÄÏÂ·½
+                //å¦‚æœ1åœ¨2çš„ä¸‹æ–¹
                 dAB = -dAB;
             }
         } else {
-            //Èç¹û1ÔÚ2µÄ×ó·½
+            //å¦‚æœ1åœ¨2çš„å·¦æ–¹
             if (point1.y > point2.y) {
-                //Èç¹û1ÔÚ2µÄÉÏ·½
+                //å¦‚æœ1åœ¨2çš„ä¸Šæ–¹
                 dAB = 180-dAB;
             } else {
-                //Èç¹û1ÔÚ2µÄÏÂ·½
+                //å¦‚æœ1åœ¨2çš„ä¸‹æ–¹
                 dAB = 180+dAB;
             }
         }
@@ -821,27 +825,27 @@ public class CalculateStucture : MonoBehaviour
         return result.normalized;
     }
 
-    // ¼ÆËãÏßln[2] ÓëÆ½Ãæplane[4]µÄ½»µã interPt
+    // è®¡ç®—çº¿ln[2] ä¸å¹³é¢plane[4]çš„äº¤ç‚¹ interPt
     private bool IsLineInterPlane(NGlbVec3d[] ln, NGlbPlane plane,out NGlbVec3d interPt) {
         interPt = new NGlbVec3d();
-        // Ö±Ïß·½³ÌP(t) = Q + tV
+        // ç›´çº¿æ–¹ç¨‹P(t) = Q + tV
         NGlbVec3d Q = ln[0];
         NGlbVec3d V = ln[1] - ln[0];
         V.normalize();
 
-        // Æ½Ãæ·½³Ì N * P(x,y,z) + D = 0
+        // å¹³é¢æ–¹ç¨‹ N * P(x,y,z) + D = 0
         NGlbVec3d N = new NGlbVec3d(plane.A, plane.B, plane.C);
         //N.normalize();
         float D = plane.D;
 
         float s = N * V;
 
-        if (s == 0.0) // Ö±ÏßÓëÆ½ÃæÆ½ĞĞ
+        if (s == 0.0) // ç›´çº¿ä¸å¹³é¢å¹³è¡Œ
             return false;
 
         float q = -D - N * Q;
         float t = q / s;
-        // ½«t´øÈëÖ±Ïß·½³ÌP(t) = Q + tV,¾Í¿ÉµÃµ½Ö±ÏßÓëÆ½ÃæµÄ½»µã
+        // å°†tå¸¦å…¥ç›´çº¿æ–¹ç¨‹P(t) = Q + tV,å°±å¯å¾—åˆ°ç›´çº¿ä¸å¹³é¢çš„äº¤ç‚¹
         interPt.x = Q.x + t * V.x;
         interPt.y = Q.y + t * V.y;
         interPt.z = Q.z + t * V.z;
@@ -851,7 +855,7 @@ public class CalculateStucture : MonoBehaviour
 
 }
 
-public class NGlbVec3d {// ÈıÎ¬µã
+public class NGlbVec3d {// ä¸‰ç»´ç‚¹
     public float x, y, z;
     public NGlbVec3d() {
     }
@@ -891,7 +895,7 @@ public class NGlbVec3d {// ÈıÎ¬µã
         return new Vector3(x, y, z);
     }
 }
-public class NGlbPlane {// Æ½Ãæ
+public class NGlbPlane {// å¹³é¢
     public float A, B, C, D;
     public NGlbPlane() {
 
@@ -899,7 +903,7 @@ public class NGlbPlane {// Æ½Ãæ
     public NGlbPlane(float a, float b, float c, float d) {
         A = a; B = b; C = c; D = d;
     }
-    public NGlbPlane(NGlbVec3d v1, NGlbVec3d v2, NGlbVec3d v3) {// ¸ù¾İÈı¸öµã¼ÆËãÆ½Ãæ·½³Ì A,B,C,D
+    public NGlbPlane(NGlbVec3d v1, NGlbVec3d v2, NGlbVec3d v3) {// æ ¹æ®ä¸‰ä¸ªç‚¹è®¡ç®—å¹³é¢æ–¹ç¨‹ A,B,C,D
         NGlbVec3d v = (v3 - v1) ^ (v2 - v1);
         v.normalize();
         A = v.x;
