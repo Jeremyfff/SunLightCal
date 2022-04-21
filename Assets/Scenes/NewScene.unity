@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -231,7 +231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856343719}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -6.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawGizmos: 1
+  calReflection: 0
   "\u5168\u5C40Gizmo\u5927\u5C0F": 0.02
   "\u57FA\u7840Gizmo\u989C\u8272": {r: 1, g: 1, b: 1, a: 1}
   "\u9690\u85CFGizmo\u989C\u8272": {r: 0.5, g: 0.5, b: 0.5, a: 1}
@@ -619,7 +620,7 @@ MonoBehaviour:
   "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u7FFB\u8F6C": 0
   "\u6839\u90E8\u7535\u673A\u8DDD\u79BBrootStart\u7684\u8DDD\u79BB": 0.04
   "\u6839\u90E8\u7535\u673A\u8F68\u9053\u957F\u5EA6": 0.32
-  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 1
+  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.988
   "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u957F\u5EA6": 0.2
   "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u7FFB\u8F6C": 0
   "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EZ\u504F\u79FB": 0.06
@@ -640,16 +641,18 @@ MonoBehaviour:
   "\u7B2C\u4E09\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.5
   "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u504F\u79FB\u8DDD\u79BB": 0.05
   "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.05
-  "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.4
+  "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
   "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.1
-  "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.4
+  "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
   "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u504F\u79FB\u8DDD\u79BB": 0.05
   "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.05
-  "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.4
+  "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
   "PV\u5E95\u90E8": {fileID: 635153327}
   "PV\u9876\u90E8": {fileID: 883599909}
   "PV\u5BBD\u5EA6": 10
-  calReflection: 0
+  "\u6821\u51C6\u5C4F\u5E55\u663E\u793A": 0
+  screenScale: 1.78
+  textPadding: 0
 --- !u!4 &2071353377
 Transform:
   m_ObjectHideFlags: 0

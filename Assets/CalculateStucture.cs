@@ -1,11 +1,14 @@
-﻿using UnityEditor;
+﻿
+using UnityEditor;
 using UnityEngine;
-
+using System.Collections;
 
 
 public class CalculateStucture : MonoBehaviour
 {
     [SerializeField] private bool DrawGizmos = true;
+    [SerializeField] private bool calReflection;
+
     [SerializeField] private float 全局Gizmo大小 = 0.005f;
     [SerializeField] private Color 基础Gizmo颜色 = Color.white;
     [SerializeField] private Color 隐藏Gizmo颜色 = Color.grey;
@@ -16,9 +19,6 @@ public class CalculateStucture : MonoBehaviour
     [Range(0f,1f)]
     [SerializeField] private float 垂直电机位置百分比;
     
-
-
-
 
 
     [SerializeField] private Transform RootPos;
@@ -75,11 +75,13 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private Transform PV顶部;
     [SerializeField] private float PV宽度;
 
-    [SerializeField] private bool calReflection;
+    
 
+    [SerializeField] private bool 校准屏幕显示;
+    [SerializeField] private float screenScale;
+    [SerializeField] private float textPadding;
 
-
-
+    private ArrayList infoList = new ArrayList();
     // Start is called before the first frame update
     void Start()
     {
@@ -92,11 +94,33 @@ public class CalculateStucture : MonoBehaviour
         
     }
     private void OnDrawGizmos() {
+        var sceneCamera = SceneView.currentDrawingSceneView.camera;
+        
+        
+        var sceneCameraPos = sceneCamera.transform.position;
+        var sceneCameraDir = sceneCamera.transform.forward;
+
+        var screenCenter = sceneCameraPos + sceneCameraDir;
+        var heightDir = sceneCamera.transform.up * sceneCamera.pixelHeight / sceneCamera.pixelWidth * screenScale;
+        var widthDir = sceneCamera.transform.right  *screenScale;
+        var top_left = screenCenter - widthDir / 2 + heightDir / 2;
+        if (校准屏幕显示) {
+            Gizmos.DrawLine(top_left, screenCenter + widthDir / 2 - heightDir / 2); 
+        }
+
+        var commonText = "Info Panel";
         var sunManager = SunManager.instance;
         if(sunManager == null) {
             calReflection = false;
+            commonText = commonText + "\n运行后才能打开阳光计算";
         }
-        
+
+        infoList = new ArrayList();
+        infoList.Add(commonText);
+
+
+
+
         buildError = false;
         if (DrawGizmos) {
             var motor1Pos = DrawMotor1();
@@ -219,13 +243,16 @@ public class CalculateStucture : MonoBehaviour
                 Vector3[] pts_C = { pt_C1, pt_C2, pt_C3, pt_C4 };
                 var castPoints_C = DrawLightCast(sunDir, pts_C, PV_Plane);
 
-                CalIntersectArea(castPoints_A, PV顶部.position,PV底部.position);
-
+                var area_A = CalIntersectArea(castPoints_A, PV顶部.position,PV底部.position);
+                
+                infoList.Add(area_A.ToString());
 
 
 
 
             }
+
+            ShowInfoOnScreen(top_left, -textPadding *0.1f* sceneCamera.transform.up);
 
         }
         if (buildError) {
@@ -687,52 +714,73 @@ public class CalculateStucture : MonoBehaviour
         return result;
     }
 
-    private void CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot) {
-/*        //构建虚拟PV平面
-        var p_x = new Vector3(1, 0, 0);
-        var p_z = new Vector3(0, 0, 1);
-        var vituralPlane_top = new NGlbPlane(new NGlbVec3d(PV_top) , new NGlbVec3d(PV_top+p_x), new NGlbVec3d(PV_top+p_z));
-        var vituralPlane_bot = new NGlbPlane(new NGlbVec3d(PV_bot), new NGlbVec3d(PV_bot + p_x), new NGlbVec3d(PV_bot + p_z));
+    private float CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot) {
+        /*        //构建虚拟PV平面
+                var p_x = new Vector3(1, 0, 0);
+                var p_z = new Vector3(0, 0, 1);
+                var vituralPlane_top = new NGlbPlane(new NGlbVec3d(PV_top) , new NGlbVec3d(PV_top+p_x), new NGlbVec3d(PV_top+p_z));
+                var vituralPlane_bot = new NGlbPlane(new NGlbVec3d(PV_bot), new NGlbVec3d(PV_bot + p_x), new NGlbVec3d(PV_bot + p_z));
 
-        NGlbVec3d[] ln1 = { new NGlbVec3d(castPoints[0]), new NGlbVec3d(castPoints[3]) };
-        NGlbVec3d[] ln2 = { new NGlbVec3d(castPoints[1]), new NGlbVec3d(castPoints[2]) };
+                NGlbVec3d[] ln1 = { new NGlbVec3d(castPoints[0]), new NGlbVec3d(castPoints[3]) };
+                NGlbVec3d[] ln2 = { new NGlbVec3d(castPoints[1]), new NGlbVec3d(castPoints[2]) };
 
-        NGlbVec3d hit1_top; NGlbVec3d hit1_bot; NGlbVec3d hit2_top; NGlbVec3d hit2_bot;
-        var hit1_top_isHit = IsLineInterPlane(ln1, vituralPlane_top, out hit1_top);
-        var hit1_bot_isHit = IsLineInterPlane(ln1, vituralPlane_bot, out hit1_bot);
-        var hit2_top_isHit = IsLineInterPlane(ln2, vituralPlane_top, out hit2_top);
-        var hit2_bot_isHit = IsLineInterPlane(ln2, vituralPlane_bot, out hit2_bot);
+                NGlbVec3d hit1_top; NGlbVec3d hit1_bot; NGlbVec3d hit2_top; NGlbVec3d hit2_bot;
+                var hit1_top_isHit = IsLineInterPlane(ln1, vituralPlane_top, out hit1_top);
+                var hit1_bot_isHit = IsLineInterPlane(ln1, vituralPlane_bot, out hit1_bot);
+                var hit2_top_isHit = IsLineInterPlane(ln2, vituralPlane_top, out hit2_top);
+                var hit2_bot_isHit = IsLineInterPlane(ln2, vituralPlane_bot, out hit2_bot);
 
-        Vector3 ln1_top = castPoints[3];
-        Vector3 ln1_bot = castPoints[0];
+                Vector3 ln1_top = castPoints[3];
+                Vector3 ln1_bot = castPoints[0];
 
-        Vector3 ln2_top = castPoints[2];
-        Vector3 ln2_bot = castPoints[3];
+                Vector3 ln2_top = castPoints[2];
+                Vector3 ln2_bot = castPoints[3];
 
 
-        Gizmos.color = 高亮Gizmo颜色;
-        if (hit1_top_isHit) {
-            ln1_top = hit1_top.toVector3();
-            Gizmos.DrawSphere(ln1_top, 全局Gizmo大小);
+                Gizmos.color = 高亮Gizmo颜色;
+                if (hit1_top_isHit) {
+                    ln1_top = hit1_top.toVector3();
+                    Gizmos.DrawSphere(ln1_top, 全局Gizmo大小);
+                }
+                if (hit1_bot_isHit) {
+                    ln1_bot = hit1_bot.toVector3();
+                    Gizmos.DrawSphere(ln1_bot, 全局Gizmo大小);
+                }
+                if (hit2_top_isHit) {
+                    ln2_top = hit2_top.toVector3();
+                    Gizmos.DrawSphere(ln2_top, 全局Gizmo大小);
+                }
+                if (hit2_bot_isHit) {
+                    ln2_bot = hit2_bot.toVector3();
+                    Gizmos.DrawSphere(ln2_bot, 全局Gizmo大小);
+                }
+
+
+                var height = Vector3.Distance(ln1_top, ln1_bot);
+                var 基础CubeSize = new Vector3(0.1f, 0.1f, 0.1f);
+        */
+        var y2dis = Vector3.Distance(PV_top, PV_bot) / Mathf.Abs(PV_top.y - PV_bot.y);
+        if(castPoints[0].y > PV_top.y) {
+            return 0;
         }
-        if (hit1_bot_isHit) {
-            ln1_bot = hit1_bot.toVector3();
-            Gizmos.DrawSphere(ln1_bot, 全局Gizmo大小);
+        if(castPoints[3].y < PV_bot.y)
+        {
+            return 0;
         }
-        if (hit2_top_isHit) {
-            ln2_top = hit2_top.toVector3();
-            Gizmos.DrawSphere(ln2_top, 全局Gizmo大小);
+        var bot_y = PV_bot.y;
+        if(castPoints[0].y > PV_bot.y)
+        {
+            bot_y = castPoints[0].y;
         }
-        if (hit2_bot_isHit) {
-            ln2_bot = hit2_bot.toVector3();
-            Gizmos.DrawSphere(ln2_bot, 全局Gizmo大小);
+        var top_y = PV_top.y;
+        if (castPoints[3].y < PV_top.y)
+        {
+            top_y = castPoints[3].y;
         }
 
-
-        var height = Vector3.Distance(ln1_top, ln1_bot);
-        var 基础CubeSize = new Vector3(0.1f, 0.1f, 0.1f);
-*/
-
+        var castYDist = Mathf.Abs(top_y - bot_y) * y2dis;
+        var castXDist = Mathf.Abs(castPoints[0].x - castPoints[1].x);
+        return castYDist * castXDist;
 
     }
     
@@ -851,6 +899,18 @@ public class CalculateStucture : MonoBehaviour
         interPt.z = Q.z + t * V.z;
         return true;
     }
+
+    //===========================
+
+    private void ShowInfoOnScreen(Vector3 basePoint,Vector3 shift) {
+        var point = basePoint;
+        foreach(var info in infoList) {
+            Handles.Label(point, (string)info);
+            point += shift;
+        }
+
+    }
+
 
 
 }
