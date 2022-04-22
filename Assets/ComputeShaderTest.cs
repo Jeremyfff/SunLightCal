@@ -185,7 +185,8 @@ public class ComputeShaderTest : MonoBehaviour {
         
     }
 
-    public void StopCalEvent() {
+    public void StopCalEvent() 
+    {
         if (gameInfo.currentModelMode == 0) {
             StopCoroutine("IE_CalLoop_org");
         } else {

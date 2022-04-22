@@ -2,7 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections;
-
+using System;
+using System.Collections.Generic;
 
 public class CalculateStucture : MonoBehaviour
 {
@@ -81,11 +82,17 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float screenScale;
     [SerializeField] private float textPadding;
 
+    private SunManager sunManager;
     private ArrayList infoList = new ArrayList();
+    private long lastTime = 0;
+    private int count = 0;
+    //data
+    private List<float> DirectHav;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        sunManager = SunManager.instance;
     }
 
     // Update is called once per frame
@@ -94,9 +101,10 @@ public class CalculateStucture : MonoBehaviour
         
     }
     private void OnDrawGizmos() {
+        Debug.Log("drawing gizmos" + count.ToString());
+        count++;
+        //计算屏幕显示相关数值
         var sceneCamera = SceneView.currentDrawingSceneView.camera;
-        
-        
         var sceneCameraPos = sceneCamera.transform.position;
         var sceneCameraDir = sceneCamera.transform.forward;
 
@@ -108,114 +116,125 @@ public class CalculateStucture : MonoBehaviour
             Gizmos.DrawLine(top_left, screenCenter + widthDir / 2 - heightDir / 2); 
         }
 
+        //初始化info panel
         var commonText = "Info Panel";
-        var sunManager = SunManager.instance;
+        
         if(sunManager == null) {
             calReflection = false;
-            commonText = commonText + "\n运行后才能打开阳光计算";
+            commonText = commonText + "   Tip:运行后才能打开阳光计算";
         }
 
         infoList = new ArrayList();
         infoList.Add(commonText);
 
-
-
+        //初始化data
+        if(DirectHav == null) {
+            DirectHav = FileOperator.ReadDirectHav();
+        }
 
         buildError = false;
-        if (DrawGizmos) {
-            var motor1Pos = DrawMotor1();
-            Handles.Label(motor1Pos, "motor1Pos");
 
-            var rootEnd = RootPos.position;
-            Handles.Label(RootPos.position, "rootEnd");
+        
+        //开始计算
+        
+        var motor1Pos = DrawMotor1();
+        Handles.Label(motor1Pos, "motor1Pos");
 
-            var rootStart = DrawRoot(motor1Pos);
-            Handles.Label(rootStart, "rootStart");
+        var rootEnd = RootPos.position;
+        Handles.Label(RootPos.position, "rootEnd");
 
-            var motor2Pos = DrawMotor2(rootStart, rootEnd);
-            Handles.Label(motor2Pos, "motor2Pos");
+        var rootStart = DrawRoot(motor1Pos);
+        Handles.Label(rootStart, "rootStart");
 
-
-            //更改features
-
-            var fingle1Start = DrawFingle1Start(rootStart, rootEnd);
-            Handles.Label(fingle1Start, "fingle1Start");
+        var motor2Pos = DrawMotor2(rootStart, rootEnd);
+        Handles.Label(motor2Pos, "motor2Pos");
 
 
-            var link1End =  DrawLink1(motor2Pos, fingle1Start);
-            Handles.Label(link1End, "link1End");
+        //更改features
 
-            var fingle1Dir = DrawNode1(fingle1Start, link1End);
-
-
-            var fingle1End = DrawFingle1(fingle1Start, fingle1Dir);
-            Handles.Label(fingle1End, "fingle1End");
-
-            //-------------------------------------------------
-
-            var link2Start = DrawLink2Start(rootEnd - rootStart, fingle1Start);
-            Handles.Label(link2Start, "link2Start");
-
-            var link2End = DrawLink2(link2Start, fingle1End);
-            Handles.Label(link2End, "link2End");
-
-            var fingle2Dir = DrawNode2(fingle1End, link2End);
-
-            var fingle2End = DrawFingle2(fingle1End, fingle2Dir);
-            Handles.Label(fingle2End, "fingle2End");
-
-            //-------------------------------------------------
-
-            var link3Start = DrawLink3Start(fingle1End - rootEnd, fingle1End);
-            Handles.Label(link3Start, "link3Start");
-
-            var link3End = DrawLink3(link3Start, fingle2End);
-            Handles.Label(link3End, "link3End");
-
-            var fingle3Dir = DrawNode3(fingle2End, link3End);
+        var fingle1Start = DrawFingle1Start(rootStart, rootEnd);
+        Handles.Label(fingle1Start, "fingle1Start");
 
 
-            var fingle3End = DrawFingle3(fingle2End, fingle3Dir);
-            Handles.Label(fingle3End, "fingle3End");
+        var link1End =  DrawLink1(motor2Pos, fingle1Start);
+        Handles.Label(link1End, "link1End");
 
-            //-------------------------------------------------
-            //-------------------------------------------------
+        var fingle1Dir = DrawNode1(fingle1Start, link1End);
 
-            var rod2End =  DrawFingle2Rod((fingle1End + fingle2End) / 2, fingle2Dir, true);
-            Vector3 board2Start;
-            Vector3 board2End;
-            DrawReflectBoard2(rod2End, fingle2Dir, out board2Start, out board2End);
 
-            var rod1End = DrawFingle1Rod(fingle1Start, fingle1End, board2Start, true);
-            var board1Start = DrawReflectBoard1(board2Start, rod1End);
+        var fingle1End = DrawFingle1(fingle1Start, fingle1Dir);
+        Handles.Label(fingle1End, "fingle1End");
 
-            var rod3End = DrawFingle3Rod(fingle2End,fingle3End, board2End, false);
-            var board3End = DrawReflectBoard3(board2End, rod3End);
+        //-------------------------------------------------
+
+        var link2Start = DrawLink2Start(rootEnd - rootStart, fingle1Start);
+        Handles.Label(link2Start, "link2Start");
+
+        var link2End = DrawLink2(link2Start, fingle1End);
+        Handles.Label(link2End, "link2End");
+
+        var fingle2Dir = DrawNode2(fingle1End, link2End);
+
+        var fingle2End = DrawFingle2(fingle1End, fingle2Dir);
+        Handles.Label(fingle2End, "fingle2End");
+
+        //-------------------------------------------------
+
+        var link3Start = DrawLink3Start(fingle1End - rootEnd, fingle1End);
+        Handles.Label(link3Start, "link3Start");
+
+        var link3End = DrawLink3(link3Start, fingle2End);
+        Handles.Label(link3End, "link3End");
+
+        var fingle3Dir = DrawNode3(fingle2End, link3End);
+
+
+        var fingle3End = DrawFingle3(fingle2End, fingle3Dir);
+        Handles.Label(fingle3End, "fingle3End");
+
+        //-------------------------------------------------
+        //-------------------------------------------------
+
+        var rod2End =  DrawFingle2Rod((fingle1End + fingle2End) / 2, fingle2Dir, true);
+        Vector3 board2Start;
+        Vector3 board2End;
+        DrawReflectBoard2(rod2End, fingle2Dir, out board2Start, out board2End);
+
+        var rod1End = DrawFingle1Rod(fingle1Start, fingle1End, board2Start, true);
+        var board1Start = DrawReflectBoard1(board2Start, rod1End);
+
+        var rod3End = DrawFingle3Rod(fingle2End,fingle3End, board2End, false);
+        var board3End = DrawReflectBoard3(board2End, rod3End);
             
-            //-------------------------------------------------
+        //-------------------------------------------------
 
-            //视觉效果
-            var p_x = new Vector3(1, 0, 0);
-            var n_x = new Vector3(-1, 0, 0);
-            var pt_A1 = board1Start + n_x;
-            var pt_A2 = board1Start + p_x;
-            var pt_A3 = board2Start + p_x;
-            var pt_A4 = board2Start + n_x;
+        //ref board
+        var p_x = new Vector3(1, 0, 0);
+        var n_x = new Vector3(-1, 0, 0);
+        var pt_A1 = board1Start + n_x;
+        var pt_A2 = board1Start + p_x;
+        var pt_A3 = board2Start + p_x;
+        var pt_A4 = board2Start + n_x;
 
-            var pt_B1 = board2Start + n_x;
-            var pt_B2 = board2Start + p_x;
-            var pt_B3 = board2End + p_x;
-            var pt_B4 = board2End + n_x;
+        var pt_B1 = board2Start + n_x;
+        var pt_B2 = board2Start + p_x;
+        var pt_B3 = board2End + p_x;
+        var pt_B4 = board2End + n_x;
 
-            var pt_C1 = board2End + n_x;
-            var pt_C2 = board2End + p_x;
-            var pt_C3 = board3End + p_x;
-            var pt_C4 = board3End + n_x;
+        var pt_C1 = board2End + n_x;
+        var pt_C2 = board2End + p_x;
+        var pt_C3 = board3End + p_x;
+        var pt_C4 = board3End + n_x;
 
+        var board1Normal = -Vector3.Cross(pt_A2 - pt_A1, pt_A2 - pt_A3).normalized;
+        var board2Normal = -Vector3.Cross(pt_B2 - pt_B1, pt_B2 - pt_B3).normalized;
+        var board3Normal = -Vector3.Cross(pt_C2 - pt_C1, pt_C2 - pt_C3).normalized;
+        if (DrawGizmos) {
             Gizmos.DrawLine(pt_A1, pt_A2);
             Gizmos.DrawLine(pt_A3, pt_A4);
             Gizmos.DrawLine(pt_A1, pt_A4);
             Gizmos.DrawLine(pt_A3, pt_A2);
+
 
             Gizmos.DrawLine(pt_B1, pt_B2);
             Gizmos.DrawLine(pt_B3, pt_B4);
@@ -227,34 +246,79 @@ public class CalculateStucture : MonoBehaviour
             Gizmos.DrawLine(pt_C1, pt_C4);
             Gizmos.DrawLine(pt_C3, pt_C2);
 
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(pt_A1, pt_A1 + board1Normal * 0.1f);
+            Gizmos.DrawLine(pt_B1, pt_B1 + board2Normal * 0.1f);
+            Gizmos.DrawLine(pt_C1, pt_C1 + board3Normal * 0.1f);
+        }
 
-            //=============================
+        //=============================
 
-            var PV_Plane = DrawPV();
-            if (calReflection) {
-                //var sunDir = new Vector3(0.1f, -1f, 1f);
-                var sunDir = sunManager.GetSunDir();
-                //Debug.Log(sunDir);
-
-                Vector3[] pts_A = { pt_A1, pt_A2, pt_A3, pt_A4 };
-                var castPoints_A = DrawLightCast(sunDir, pts_A, PV_Plane);
-                Vector3[] pts_B = { pt_B1, pt_B2, pt_B3, pt_B4 };
-                var castPoints_B = DrawLightCast(sunDir, pts_B, PV_Plane);
-                Vector3[] pts_C = { pt_C1, pt_C2, pt_C3, pt_C4 };
-                var castPoints_C = DrawLightCast(sunDir, pts_C, PV_Plane);
-
-                var area_A = CalIntersectArea(castPoints_A, PV顶部.position,PV底部.position);
-                
-                infoList.Add(area_A.ToString());
-
-
-
-
+        var PV_Plane = DrawPV();
+        if (calReflection) {
+            //var sunDir = new Vector3(0.1f, -1f, 1f);
+            var sunDir = sunManager.GetSunDir();
+            if (DrawGizmos) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(-sunDir * 10, Vector3.zero);
             }
+            //Debug.Log(sunDir);
+            
+            Vector3[] pts_A = { pt_A1, pt_A2, pt_A3, pt_A4 };
+            var castPoints_A = DrawLightCast(sunDir, pts_A, PV_Plane);
+            Vector3[] pts_B = { pt_B1, pt_B2, pt_B3, pt_B4 };
+            var castPoints_B = DrawLightCast(sunDir, pts_B, PV_Plane);
+            Vector3[] pts_C = { pt_C1, pt_C2, pt_C3, pt_C4 };
+            var castPoints_C = DrawLightCast(sunDir, pts_C, PV_Plane);
 
-            ShowInfoOnScreen(top_left, -textPadding *0.1f* sceneCamera.transform.up);
+            float area_A;float percentage_A;
+            CalIntersectArea(castPoints_A, PV顶部.position, PV底部.position, out area_A, out percentage_A);
+            float area_B; float percentage_B;
+            CalIntersectArea(castPoints_B, PV顶部.position, PV底部.position, out area_B, out percentage_B);
+            float area_C; float percentage_C;
+            CalIntersectArea(castPoints_C, PV底部.position, PV底部.position, out area_C, out percentage_C);
+
+            infoList.Add("反光板A光斑面积：" + area_A.ToString() + "， 利用率：" + percentage_A * 100 + "%");
+            infoList.Add("反光板B光斑面积：" + area_B.ToString() + "， 利用率：" + percentage_B * 100 + "%");
+            infoList.Add("反光板C光斑面积：" + area_C.ToString() + "， 利用率：" + percentage_C * 100 + "%");
+
+            infoList.Add("-----------------" );
+
+            var refBoard1CastArea = calRefBoardCastArea(sunDir, board1Normal, Vector3.Distance(pt_A1, pt_A2) * Vector3.Distance(pt_A2, pt_A3));
+            var refBoard2CastArea = calRefBoardCastArea(sunDir, board2Normal, Vector3.Distance(pt_B1, pt_B2) * Vector3.Distance(pt_B2, pt_B3));
+            var refBoard3CastArea = calRefBoardCastArea(sunDir, board3Normal, Vector3.Distance(pt_C1, pt_C2) * Vector3.Distance(pt_C2, pt_C3));
+
+            infoList.Add("反光板A阳光投影面积：" + refBoard1CastArea.ToString());
+            infoList.Add("反光板B阳光投影面积：" + refBoard2CastArea.ToString());
+            infoList.Add("反光板C阳光投影面积：" + refBoard3CastArea.ToString());
+            infoList.Add("-----------------");
+
+            var realCastArea1 = refBoard1CastArea * percentage_A;
+            var realCastArea2 = refBoard2CastArea * percentage_B;
+            var realCastArea3 = refBoard3CastArea * percentage_C;
+
+            infoList.Add("反光板A等效辐射面积：" + realCastArea1.ToString());
+            infoList.Add("反光板B等效辐射面积：" + realCastArea2.ToString());
+            infoList.Add("反光板C等效辐射面积：" + realCastArea3.ToString());
+            infoList.Add("-----------------");
 
         }
+
+
+
+
+            
+            
+        
+        
+        long currentTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+        long fps = 1000 /(currentTime - lastTime);
+        lastTime = currentTime;
+        infoList.Add("FPS:" + fps);
+
+
+        ShowInfoOnScreen(top_left, -textPadding * 0.1f * sceneCamera.transform.up);
+
         if (buildError) {
             Debug.Log("Build Error");
             
@@ -262,7 +326,56 @@ public class CalculateStucture : MonoBehaviour
 
     }
 
-    private void DrawStructure() {
+    private void SingleCal(out float[] realCastArea) {
+        realCastArea = new float[3];
+        buildError = false;
+        //开始计算
+        var motor1Pos = DrawMotor1();var rootEnd = RootPos.position;var rootStart = DrawRoot(motor1Pos);
+        var motor2Pos = DrawMotor2(rootStart, rootEnd); var fingle1Start = DrawFingle1Start(rootStart, rootEnd);
+        var link1End = DrawLink1(motor2Pos, fingle1Start);var fingle1Dir = DrawNode1(fingle1Start, link1End);
+        var fingle1End = DrawFingle1(fingle1Start, fingle1Dir);var link2Start = DrawLink2Start(rootEnd - rootStart, fingle1Start);
+        var link2End = DrawLink2(link2Start, fingle1End);var fingle2Dir = DrawNode2(fingle1End, link2End);
+        var fingle2End = DrawFingle2(fingle1End, fingle2Dir);var link3Start = DrawLink3Start(fingle1End - rootEnd, fingle1End);
+        var link3End = DrawLink3(link3Start, fingle2End); var fingle3Dir = DrawNode3(fingle2End, link3End);
+        var fingle3End = DrawFingle3(fingle2End, fingle3Dir);var rod2End = DrawFingle2Rod((fingle1End + fingle2End) / 2, fingle2Dir, true);
+        Vector3 board2Start;Vector3 board2End;DrawReflectBoard2(rod2End, fingle2Dir, out board2Start, out board2End);
+        var rod1End = DrawFingle1Rod(fingle1Start, fingle1End, board2Start, true); var board1Start = DrawReflectBoard1(board2Start, rod1End);
+        var rod3End = DrawFingle3Rod(fingle2End, fingle3End, board2End, false);var board3End = DrawReflectBoard3(board2End, rod3End);
+        //-------------------------------------------------
+        //ref board
+        var p_x = new Vector3(1, 0, 0);var n_x = new Vector3(-1, 0, 0);
+        var pt_A1 = board1Start + n_x;var pt_A2 = board1Start + p_x;var pt_A3 = board2Start + p_x;var pt_A4 = board2Start + n_x;
+        var pt_B1 = board2Start + n_x;var pt_B2 = board2Start + p_x;var pt_B3 = board2End + p_x;var pt_B4 = board2End + n_x;
+        var pt_C1 = board2End + n_x;var pt_C2 = board2End + p_x;var pt_C3 = board3End + p_x;var pt_C4 = board3End + n_x;
+
+        var board1Normal = -Vector3.Cross(pt_A2 - pt_A1, pt_A2 - pt_A3).normalized;
+        var board2Normal = -Vector3.Cross(pt_B2 - pt_B1, pt_B2 - pt_B3).normalized;
+        var board3Normal = -Vector3.Cross(pt_C2 - pt_C1, pt_C2 - pt_C3).normalized;
+
+        //=============================
+
+        var PV_Plane = DrawPV();
+        var sunDir = sunManager.GetSunDir();
+        Vector3[] pts_A = { pt_A1, pt_A2, pt_A3, pt_A4 };var castPoints_A = DrawLightCast(sunDir, pts_A, PV_Plane);
+        Vector3[] pts_B = { pt_B1, pt_B2, pt_B3, pt_B4 }; var castPoints_B = DrawLightCast(sunDir, pts_B, PV_Plane);
+        Vector3[] pts_C = { pt_C1, pt_C2, pt_C3, pt_C4 };var castPoints_C = DrawLightCast(sunDir, pts_C, PV_Plane);
+
+        float area_A; float percentage_A;
+        CalIntersectArea(castPoints_A, PV顶部.position, PV底部.position, out area_A, out percentage_A);
+        float area_B; float percentage_B;
+        CalIntersectArea(castPoints_B, PV顶部.position, PV底部.position, out area_B, out percentage_B);
+        float area_C; float percentage_C;
+        CalIntersectArea(castPoints_C, PV底部.position, PV底部.position, out area_C, out percentage_C);
+
+
+        var refBoard1CastArea = calRefBoardCastArea(sunDir, board1Normal, Vector3.Distance(pt_A1, pt_A2) * Vector3.Distance(pt_A2, pt_A3));
+        var refBoard2CastArea = calRefBoardCastArea(sunDir, board2Normal, Vector3.Distance(pt_B1, pt_B2) * Vector3.Distance(pt_B2, pt_B3));
+        var refBoard3CastArea = calRefBoardCastArea(sunDir, board3Normal, Vector3.Distance(pt_C1, pt_C2) * Vector3.Distance(pt_C2, pt_C3));
+
+
+        realCastArea[0] = refBoard1CastArea * percentage_A;
+        realCastArea[1] = refBoard2CastArea * percentage_B;
+        realCastArea[2] = refBoard3CastArea * percentage_C;
 
     }
 
@@ -541,8 +654,11 @@ public class CalculateStucture : MonoBehaviour
 
     private Vector3 DrawFingle3(Vector3 start, Vector3 dir) {
         var end = start + dir * 第三指节长度;
-        Gizmos.color = 基础Gizmo颜色;
-        Gizmos.DrawLine(start, end);
+        if (DrawGizmos) {
+            Gizmos.color = 基础Gizmo颜色;
+            Gizmos.DrawLine(start, end);
+        }
+
         return end;
     }
 
@@ -714,58 +830,19 @@ public class CalculateStucture : MonoBehaviour
         return result;
     }
 
-    private float CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot) {
-        /*        //构建虚拟PV平面
-                var p_x = new Vector3(1, 0, 0);
-                var p_z = new Vector3(0, 0, 1);
-                var vituralPlane_top = new NGlbPlane(new NGlbVec3d(PV_top) , new NGlbVec3d(PV_top+p_x), new NGlbVec3d(PV_top+p_z));
-                var vituralPlane_bot = new NGlbPlane(new NGlbVec3d(PV_bot), new NGlbVec3d(PV_bot + p_x), new NGlbVec3d(PV_bot + p_z));
-
-                NGlbVec3d[] ln1 = { new NGlbVec3d(castPoints[0]), new NGlbVec3d(castPoints[3]) };
-                NGlbVec3d[] ln2 = { new NGlbVec3d(castPoints[1]), new NGlbVec3d(castPoints[2]) };
-
-                NGlbVec3d hit1_top; NGlbVec3d hit1_bot; NGlbVec3d hit2_top; NGlbVec3d hit2_bot;
-                var hit1_top_isHit = IsLineInterPlane(ln1, vituralPlane_top, out hit1_top);
-                var hit1_bot_isHit = IsLineInterPlane(ln1, vituralPlane_bot, out hit1_bot);
-                var hit2_top_isHit = IsLineInterPlane(ln2, vituralPlane_top, out hit2_top);
-                var hit2_bot_isHit = IsLineInterPlane(ln2, vituralPlane_bot, out hit2_bot);
-
-                Vector3 ln1_top = castPoints[3];
-                Vector3 ln1_bot = castPoints[0];
-
-                Vector3 ln2_top = castPoints[2];
-                Vector3 ln2_bot = castPoints[3];
-
-
-                Gizmos.color = 高亮Gizmo颜色;
-                if (hit1_top_isHit) {
-                    ln1_top = hit1_top.toVector3();
-                    Gizmos.DrawSphere(ln1_top, 全局Gizmo大小);
-                }
-                if (hit1_bot_isHit) {
-                    ln1_bot = hit1_bot.toVector3();
-                    Gizmos.DrawSphere(ln1_bot, 全局Gizmo大小);
-                }
-                if (hit2_top_isHit) {
-                    ln2_top = hit2_top.toVector3();
-                    Gizmos.DrawSphere(ln2_top, 全局Gizmo大小);
-                }
-                if (hit2_bot_isHit) {
-                    ln2_bot = hit2_bot.toVector3();
-                    Gizmos.DrawSphere(ln2_bot, 全局Gizmo大小);
-                }
-
-
-                var height = Vector3.Distance(ln1_top, ln1_bot);
-                var 基础CubeSize = new Vector3(0.1f, 0.1f, 0.1f);
-        */
+    private void CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot,out float area,out float percentage) {
+        var orgDist = Vector3.Distance(castPoints[0],castPoints[3]);
         var y2dis = Vector3.Distance(PV_top, PV_bot) / Mathf.Abs(PV_top.y - PV_bot.y);
+
+        area = 0f;
+        percentage = 0f;
+
         if(castPoints[0].y > PV_top.y) {
-            return 0;
+            return;
         }
         if(castPoints[3].y < PV_bot.y)
         {
-            return 0;
+            return;
         }
         var bot_y = PV_bot.y;
         if(castPoints[0].y > PV_bot.y)
@@ -780,7 +857,21 @@ public class CalculateStucture : MonoBehaviour
 
         var castYDist = Mathf.Abs(top_y - bot_y) * y2dis;
         var castXDist = Mathf.Abs(castPoints[0].x - castPoints[1].x);
-        return castYDist * castXDist;
+
+        percentage = castYDist / orgDist;
+        area = castYDist * castXDist;
+        return;
+    }
+
+    private float calRefBoardCastArea(Vector3 sunDir,Vector3 refBoardNormal,float refBoardArea) {
+        if(Vector3.Dot(sunDir,refBoardNormal) > 0) {
+            return 0f;
+        }
+        float angleInD  = Vector3.Angle(-sunDir, refBoardNormal);
+        float angleInR = angleInD / 180f * Mathf.PI;
+
+        var result = refBoardArea * Mathf.Cos(angleInR);
+        return result;
 
     }
     
