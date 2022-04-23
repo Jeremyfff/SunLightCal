@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class CalculateStucture : MonoBehaviour
 {
-    [SerializeField] private bool DrawGizmos = true;
+    [SerializeField] public bool DrawGizmos = true;
     [SerializeField] private bool calReflection;
 
     [SerializeField] private float 全局Gizmo大小 = 0.005f;
@@ -330,8 +330,13 @@ public class CalculateStucture : MonoBehaviour
 
     }
 
-    private void SingleCal(out float[] realCastArea) {
+    /// <summary>
+    /// 进行某一时刻的日照结果计算
+    /// </summary>
+    /// <param name="realCastArea">返回等效的太阳辐射面积，浮点型数组，长度为3</param>
+    public bool SingleCal(bool testMode,out float[] realCastArea,out float[] distance) {
         realCastArea = new float[3];
+        distance = new float[3];
         buildError = false;
         //开始计算
         var motor1Pos = DrawMotor1();var rootEnd = RootPos.position;var rootStart = DrawRoot(motor1Pos);
@@ -346,6 +351,13 @@ public class CalculateStucture : MonoBehaviour
         var rod1End = DrawFingle1Rod(fingle1Start, fingle1End, board2Start, true); var board1Start = DrawReflectBoard1(board2Start, rod1End);
         var rod3End = DrawFingle3Rod(fingle2End, fingle3End, board2End, false);var board3End = DrawReflectBoard3(board2End, rod3End);
         //-------------------------------------------------
+
+        if (testMode)
+        {
+            //如果是测试是否有构建错误，则在这里停止
+            return !buildError;
+        }
+
         //ref board
         var p_x = new Vector3(1, 0, 0);var n_x = new Vector3(-1, 0, 0);
         var pt_A1 = board1Start + n_x;var pt_A2 = board1Start + p_x;var pt_A3 = board2Start + p_x;var pt_A4 = board2Start + n_x;
@@ -355,6 +367,7 @@ public class CalculateStucture : MonoBehaviour
         var board1Normal = -Vector3.Cross(pt_A2 - pt_A1, pt_A2 - pt_A3).normalized;
         var board2Normal = -Vector3.Cross(pt_B2 - pt_B1, pt_B2 - pt_B3).normalized;
         var board3Normal = -Vector3.Cross(pt_C2 - pt_C1, pt_C2 - pt_C3).normalized;
+
 
         //=============================
 
@@ -381,8 +394,25 @@ public class CalculateStucture : MonoBehaviour
         realCastArea[1] = refBoard2CastArea * percentage_B;
         realCastArea[2] = refBoard3CastArea * percentage_C;
 
+        distance[0] = CalLightCastDistance(castPoints_A, PV顶部.position, PV底部.position);
+        distance[1] = CalLightCastDistance(castPoints_B, PV顶部.position, PV底部.position);
+        distance[2] = CalLightCastDistance(castPoints_C, PV顶部.position, PV底部.position);
+
+
+
+        //如果没有错误，返回真
+        return !buildError;
     }
 
+    public void SetMotor1(float pos)
+    {
+        垂直电机位置百分比 = pos;
+    }
+
+    public void SetMotor2(float pos)
+    {
+        根部电机位置百分比 = pos;
+    }
     //----------------------------------------------------------------------
 
     private Vector3 DrawMotor1() {
@@ -834,6 +864,20 @@ public class CalculateStucture : MonoBehaviour
         return result;
     }
 
+    private float CalLightCastDistance(Vector3[] castPoints,Vector3 PV_Top,Vector3 PV_Bot)
+    {
+        if(castPoints.Length != 4)
+        {
+            return float.MaxValue;
+        }
+        var pt1 = castPoints[0];
+        var pt2 = castPoints[2];
+        var castCenter = new Vector3((pt1.x  +pt2.x)/2f, (pt1.y + pt2.y)/2f,(pt1.z + pt2.z)/2f);
+        var pvCenter = new Vector3((PV_Top.x + PV_Bot.x) / 2f, (PV_Top.y + PV_Bot.y) / 2f, (PV_Top.z + PV_Bot.z) / 2f);
+
+        return Vector3.Distance(pt1,pt2);
+
+    }
     private void CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot,out float area,out float percentage) {
         var orgDist = Vector3.Distance(castPoints[0],castPoints[3]);
         var y2dis = Vector3.Distance(PV_top, PV_bot) / Mathf.Abs(PV_top.y - PV_bot.y);
