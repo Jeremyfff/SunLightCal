@@ -40,19 +40,23 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float 第一指节开始位置Y偏移;
     //以上两个偏移都是基于root的坐标系来的，是相对于rootEnd的偏移
 
-    [SerializeField] private float 指节节点1有效半径;
+    [SerializeField] private float link1End半径;
     [SerializeField] private float 第一指节与link1End夹角;
     [SerializeField] private float 第一指节长度;
     [SerializeField] private float 第一指节连杆长度;
 
+    [SerializeField] private float Link2Start半径;
     [SerializeField] private float Link2Start的角度位置;
-    [SerializeField] private float 指节节点2有效半径;
+
+    [SerializeField] private float link2End半径;
     [SerializeField] private float 第二指节与link2End夹角;
     [SerializeField] private float 第二指节长度;
     [SerializeField] private float 第二指节连杆长度;
 
+    [SerializeField] private float Link3Start半径;
     [SerializeField] private float Link3Start的角度位置;
-    [SerializeField] private float 指节节点3有效半径;
+
+    [SerializeField] private float link3End半径;
     [SerializeField] private float 第三指节与link3End夹角;
     [SerializeField] private float 第三指节长度;
     [SerializeField] private float 第三指节连杆长度;
@@ -101,8 +105,8 @@ public class CalculateStucture : MonoBehaviour
         
     }
     private void OnDrawGizmos() {
-        Debug.Log("drawing gizmos" + count.ToString());
-        count++;
+        //Debug.Log("drawing gizmos" + count.ToString());
+        //count++;
         //计算屏幕显示相关数值
         var sceneCamera = SceneView.currentDrawingSceneView.camera;
         var sceneCameraPos = sceneCamera.transform.position;
@@ -460,7 +464,7 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawLink1(Vector3 motor2Pos,Vector3 rootEnd) {
         var point1 = motor2Pos;
         var point2 = rootEnd;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, 根部电机连杆长度, 指节节点1有效半径, 根部电机连杆翻转);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, 根部电机连杆长度, link1End半径, 根部电机连杆翻转);
 
         if (DrawGizmos) {
             Gizmos.color = 高亮Gizmo颜色;
@@ -476,7 +480,7 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawNode1(Vector3 center,Vector3 link1End) {
         if (DrawGizmos) {
             Gizmos.color = 隐藏Gizmo颜色;
-            Gizmos.DrawWireSphere(center, 指节节点1有效半径);
+            Gizmos.DrawWireSphere(center, Link2Start半径);
         }
 
 
@@ -511,7 +515,7 @@ public class CalculateStucture : MonoBehaviour
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
 
-        var result = center + newDir * 指节节点1有效半径;
+        var result = center + newDir * Link2Start半径;
 
         if (DrawGizmos) {
             Gizmos.color = 基础Gizmo颜色;
@@ -537,7 +541,7 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawLink2(Vector3 link2Start,Vector3 fingle1End) {
         var point1 = link2Start;
         var point2 = fingle1End;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, 第一指节连杆长度, 指节节点2有效半径, false);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, 第一指节连杆长度, link2End半径, false);
 
         if (DrawGizmos) {
             Gizmos.color = 高亮Gizmo颜色;
@@ -553,7 +557,7 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawNode2(Vector3 center, Vector3 link2End) {
         if (DrawGizmos) {
             Gizmos.color = 隐藏Gizmo颜色;
-            Gizmos.DrawWireSphere(center, 指节节点2有效半径);
+            Gizmos.DrawWireSphere(center, Link3Start半径);
         }
 
 
@@ -588,7 +592,7 @@ public class CalculateStucture : MonoBehaviour
 
         var newDir = new Vector3(0, Mathf.Sin(dB), Mathf.Cos(dB));
 
-        var result = center + newDir * 指节节点2有效半径;
+        var result = center + newDir * Link3Start半径;
 
         if (DrawGizmos) {
             Gizmos.color = 基础Gizmo颜色;
@@ -615,7 +619,7 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawLink3(Vector3 link3Start, Vector3 fingle2End) {
         var point1 = link3Start;
         var point2 = fingle2End;
-        var point3 = CalculatePointFromPointsAndLength(point1, point2, 第二指节连杆长度, 指节节点3有效半径, false);
+        var point3 = CalculatePointFromPointsAndLength(point1, point2, 第二指节连杆长度, link3End半径, false);
 
         if (DrawGizmos) {
             Gizmos.color = 高亮Gizmo颜色;
@@ -631,7 +635,7 @@ public class CalculateStucture : MonoBehaviour
     private Vector3 DrawNode3(Vector3 center, Vector3 link3End) {
         if (DrawGizmos) {
             Gizmos.color = 隐藏Gizmo颜色;
-            Gizmos.DrawWireSphere(center, 指节节点3有效半径);
+            Gizmos.DrawWireSphere(center, link3End半径);
         }
 
 
