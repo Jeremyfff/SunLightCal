@@ -4,19 +4,19 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
-
+using NaughtyAttributes;
 public class CalculateStucture : MonoBehaviour
 {
     [SerializeField] public bool DrawGizmos = true;
     [SerializeField] private bool calReflection;
 
+    [HorizontalLine(height:0.5f)]
     [SerializeField] private float 全局Gizmo大小 = 0.005f;
     [SerializeField] private Color 基础Gizmo颜色 = Color.white;
     [SerializeField] private Color 隐藏Gizmo颜色 = Color.grey;
     [SerializeField] private Color 电机Gizmo颜色 = Color.red;
     [SerializeField] private Color 高亮Gizmo颜色 = Color.yellow;
-    [SerializeField] private Transform 垂直电机轨道Start;
-    [SerializeField] private Transform 垂直电机轨道End;
+    [HorizontalLine(height: 0.5f)]
     [Range(0f,1f)]
     [SerializeField] private float 垂直电机位置百分比;
     
@@ -35,7 +35,7 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float 根部电机位置百分比;
     [SerializeField] private float 根部电机连杆长度;
     [SerializeField] private bool 根部电机连杆翻转;
-
+    [HorizontalLine(height: 0.5f)]
     [SerializeField] private float 第一指节开始位置Z偏移;
     [SerializeField] private float 第一指节开始位置Y偏移;
     //以上两个偏移都是基于root的坐标系来的，是相对于rootEnd的偏移
@@ -45,6 +45,7 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float 第一指节长度;
     [SerializeField] private float 第一指节连杆长度;
 
+    [HorizontalLine(height: 0.5f)]
     [SerializeField] private float Link2Start半径;
     [SerializeField] private float Link2Start的角度位置;
 
@@ -53,6 +54,7 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float 第二指节长度;
     [SerializeField] private float 第二指节连杆长度;
 
+    [HorizontalLine(height: 0.5f)]
     [SerializeField] private float Link3Start半径;
     [SerializeField] private float Link3Start的角度位置;
 
@@ -61,7 +63,7 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float 第三指节长度;
     [SerializeField] private float 第三指节连杆长度;
 
-
+    [HorizontalLine(height: 0.5f)]
     [SerializeField] private float 第一指节反射板连杆偏移距离;
     [SerializeField] private float 第一指节反射板连杆长度;
     [SerializeField] private float 第一指节反射板长度;
@@ -74,14 +76,19 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float 第三指节反射板连杆长度;
     [SerializeField] private float 第三指节反射板长度;
 
+    
     private bool buildError = false;
+
+    [HorizontalLine(height: 0.5f)]
+    [SerializeField] private Transform 垂直电机轨道Start;
+    [SerializeField] private Transform 垂直电机轨道End;
 
     [SerializeField] private Transform PV底部;
     [SerializeField] private Transform PV顶部;
     [SerializeField] private float PV宽度;
 
-    
 
+    [HorizontalLine(height: 0.5f)]
     [SerializeField] private bool 校准屏幕显示;
     [SerializeField] private float screenScale;
     [SerializeField] private float textPadding;
@@ -879,9 +886,9 @@ public class CalculateStucture : MonoBehaviour
 
     }
     private void CalIntersectArea(Vector3[] castPoints,Vector3 PV_top,Vector3 PV_bot,out float area,out float percentage) {
-        var orgDist = Vector3.Distance(castPoints[0],castPoints[3]);
+        
         var y2dis = Vector3.Distance(PV_top, PV_bot) / Mathf.Abs(PV_top.y - PV_bot.y);
-
+        var orghDist = MathF.Abs(castPoints[0].y - castPoints[3].y) * y2dis;
         area = 0f;
         percentage = 0f;
 
@@ -906,7 +913,7 @@ public class CalculateStucture : MonoBehaviour
         var castYDist = Mathf.Abs(top_y - bot_y) * y2dis;
         var castXDist = Mathf.Abs(castPoints[0].x - castPoints[1].x);
 
-        percentage = castYDist / orgDist;
+        percentage = castYDist / orghDist;
         area = castYDist * castXDist;
         return;
     }
