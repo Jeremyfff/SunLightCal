@@ -34,6 +34,12 @@ public class SunManager : MonoBehaviour {
         }
     }
 
+    private void OnDrawGizmos() {
+        time = new Time(month, day, hour, minute);
+        UpdateSunDir();
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(SunDir, Vector3.zero);
+    }
     public Vector3 SetTimeAndUpdate(int month,int day,int hour,int minute) {
         this.month = month;
         this.day = day;

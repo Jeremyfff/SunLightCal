@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -790,12 +790,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9ca2e1fa5e14300ae7215dab0a75ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  motor1Granularity: 0.001
+  granularityStep1: 8
+  motor2Granularity: 0.005
+  granularityStep2: 8
+  minuteStart: 361
+  minuteEnd: 1081
+  minuteGap: 60
+  minuteProgress: 0
+  dayStart: 0
+  dayEnd: 365
+  dayGap: 30
+  dayProgress: 0
   structure: {fileID: 2071353376}
   sunManager: {fileID: 2014796295}
-  "\u8BA1\u7B97\u6709\u6548\u8303\u56F4": 0
-  "\u8FDB\u884C\u5355\u6B21\u8BA1\u7B97": 0
-  motor1Granularity: 0.01
-  motor2Granularity: 0.01
+  dataPool: 
 --- !u!4 &1701604416
 Transform:
   m_ObjectHideFlags: 0
@@ -907,10 +916,10 @@ MonoBehaviour:
   AutoUpdate: 1
   lon: 120
   lat: 32
-  month: 9
-  day: 1
-  hour: 13
-  minute: 0
+  month: 0
+  day: 53
+  hour: 0
+  minute: 699
 --- !u!4 &2014796296
 Transform:
   m_ObjectHideFlags: 0
@@ -918,7 +927,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2014796294}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.38806954, y: -0.059542146, z: 0.025133202, w: 0.9193613}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -962,9 +971,7 @@ MonoBehaviour:
   "\u9690\u85CFGizmo\u989C\u8272": {r: 0.5, g: 0.5, b: 0.5, a: 1}
   "\u7535\u673AGizmo\u989C\u8272": {r: 1, g: 0, b: 0, a: 1}
   "\u9AD8\u4EAEGizmo\u989C\u8272": {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  "\u5782\u76F4\u7535\u673A\u8F68\u9053Start": {fileID: 1092486292}
-  "\u5782\u76F4\u7535\u673A\u8F68\u9053End": {fileID: 1931218255}
-  "\u5782\u76F4\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.142
+  "\u5782\u76F4\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.31054688
   RootPos: {fileID: 1209127670}
   "\u6839\u90E8\u6709\u6548\u957F\u5EA6": 0.4814
   "\u6839\u90E8\u8FDE\u6746\u957F\u5EA6": 0.3
@@ -973,8 +980,8 @@ MonoBehaviour:
   "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u7FFB\u8F6C": 0
   "\u6839\u90E8\u7535\u673A\u8DDD\u79BBrootStart\u7684\u8DDD\u79BB": 0.09
   "\u6839\u90E8\u7535\u673A\u8F68\u9053\u957F\u5EA6": 0.32
-  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.819
-  "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u957F\u5EA6": 0.2
+  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.9150001
+  "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u957F\u5EA6": 0.18
   "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u7FFB\u8F6C": 0
   "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EZ\u504F\u79FB": 0.06
   "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EY\u504F\u79FB": 0.02
@@ -1002,12 +1009,15 @@ MonoBehaviour:
   "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u504F\u79FB\u8DDD\u79BB": 0.05
   "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.05
   "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
+  "\u5782\u76F4\u7535\u673A\u8F68\u9053Start": {fileID: 1092486292}
+  "\u5782\u76F4\u7535\u673A\u8F68\u9053End": {fileID: 1931218255}
   "PV\u5E95\u90E8": {fileID: 635153327}
   "PV\u9876\u90E8": {fileID: 883599909}
   "PV\u5BBD\u5EA6": 10
   "\u6821\u51C6\u5C4F\u5E55\u663E\u793A": 0
-  screenScale: 1.78
+  screenScale: 2.61
   textPadding: 0.5
+  sunManager: {fileID: 2014796295}
 --- !u!4 &2071353377
 Transform:
   m_ObjectHideFlags: 0

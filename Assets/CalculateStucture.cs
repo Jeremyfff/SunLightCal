@@ -93,7 +93,7 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float screenScale;
     [SerializeField] private float textPadding;
 
-    private SunManager sunManager;
+    [SerializeField] private SunManager sunManager;
     private ArrayList infoList = new ArrayList();
     private long lastTime = 0;
     private int count = 0;
@@ -103,7 +103,7 @@ public class CalculateStucture : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sunManager = SunManager.instance;
+        
     }
 
     // Update is called once per frame
@@ -312,7 +312,8 @@ public class CalculateStucture : MonoBehaviour
             infoList.Add("反光板B等效辐射面积：" + realCastArea2.ToString());
             infoList.Add("反光板C等效辐射面积：" + realCastArea3.ToString());
             infoList.Add("-----------------");
-
+            infoList.Add("总等效辐射面积：" + (realCastArea1 + realCastArea2 + realCastArea3));
+            infoList.Add("-----------------");
         }
 
 
@@ -389,7 +390,7 @@ public class CalculateStucture : MonoBehaviour
         float area_B; float percentage_B;
         CalIntersectArea(castPoints_B, PV顶部.position, PV底部.position, out area_B, out percentage_B);
         float area_C; float percentage_C;
-        CalIntersectArea(castPoints_C, PV底部.position, PV底部.position, out area_C, out percentage_C);
+        CalIntersectArea(castPoints_C, PV顶部.position, PV底部.position, out area_C, out percentage_C);
 
 
         var refBoard1CastArea = calRefBoardCastArea(sunDir, board1Normal, Vector3.Distance(pt_A1, pt_A2) * Vector3.Distance(pt_A2, pt_A3));
@@ -415,10 +416,16 @@ public class CalculateStucture : MonoBehaviour
     {
         垂直电机位置百分比 = pos;
     }
+    public float GetMotor1() {
+        return this.垂直电机位置百分比;
+    }
 
     public void SetMotor2(float pos)
     {
         根部电机位置百分比 = pos;
+    }
+    public float GetMotor2() {
+        return this.根部电机位置百分比;
     }
     //----------------------------------------------------------------------
 
