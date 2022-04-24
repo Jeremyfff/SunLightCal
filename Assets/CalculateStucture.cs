@@ -280,7 +280,7 @@ public class CalculateStucture : MonoBehaviour
             float area_B; float percentage_B;
             CalIntersectArea(castPoints_B, PV顶部.position, PV底部.position, out area_B, out percentage_B);
             float area_C; float percentage_C;
-            CalIntersectArea(castPoints_C, PV底部.position, PV底部.position, out area_C, out percentage_C);
+            CalIntersectArea(castPoints_C, PV顶部.position, PV底部.position, out area_C, out percentage_C);
 
             infoList.Add("反光板A光斑面积：" + area_A.ToString() + "， 利用率：" + percentage_A * 100 + "%");
             infoList.Add("反光板B光斑面积：" + area_B.ToString() + "， 利用率：" + percentage_B * 100 + "%");
