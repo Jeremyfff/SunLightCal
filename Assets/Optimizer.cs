@@ -14,10 +14,10 @@ public class Optimizer : MonoBehaviour {
     private void ClickEvent_SingleOptimize() { float motor1pos;float motor2pos;float bestarea; SingleOptimize(out motor1pos, out motor2pos, out bestarea,true); }
 
     [Button("单日计算")]
-    private void ClickEvent_DayOptimize() { StartCoroutine("IE_DayOptimize",false); }
+    private void ClickEvent_DayOptimize() { StartCoroutine("IE_DayOptimize", record); }
 
     [Button("全年计算")]
-    private void ClickEvent_AnnualOptimize() { StartCoroutine("IE_AnnualOptimize"); }
+    private void ClickEvent_AnnualOptimize() { StartCoroutine("IE_AnnualOptimize", record); }
 
 
 
@@ -47,11 +47,13 @@ public class Optimizer : MonoBehaviour {
     [SerializeField] private CalculateStucture structure;
     [SerializeField] private SunManager sunManager;
 
-    
+    [HorizontalLine(height: 0.5f)]
+    [SerializeField] private bool record;
 
 
-    [TextArea]
-    [SerializeField] private string dataPool;
+    [TextArea][SerializeField] private string dataPool;
+
+    [TextArea][ReadOnly]public string summary_Info;
 
 
     //GUI Debug
@@ -61,6 +63,8 @@ public class Optimizer : MonoBehaviour {
     float bestArea; 
     float bestRadiation;
 
+    float totalEnergy;
+    float totalArea;
     //
 
     private range motor1ValidRange = new range(0.0f,1.0f);
@@ -340,7 +344,8 @@ public class Optimizer : MonoBehaviour {
                 DirectHavList = FileOperator.ReadDirectHav();
             }
             bestRadiation = bestArea * GetAvgDirectHav(DirectHavList, sunManager.day, currentMinuteIndex,dayGap);
-
+            totalArea += bestArea;
+            totalEnergy += bestRadiation;
             
             currentMinuteIndex += this.minuteGap;
             minuteProgress = 100*(currentMinuteIndex - minuteStart) / (minuteEnd - minuteStart);
@@ -348,32 +353,36 @@ public class Optimizer : MonoBehaviour {
             if (record) {
                 float[] values = { motor1pos, motor2pos, bestArea,bestRadiation };
                 dataPool += toStringCsv(sunManager.day, sunManager.minute, values);
+                summary_Info = "totalArea : " + totalArea + "| total Energy : " + totalEnergy;
             }
             yield return null;
 
         }
+        minuteProgress = 100;
         minuteWorking = false;
     }
 
 
-    IEnumerator IE_AnnualOptimize() {
+    IEnumerator IE_AnnualOptimize(bool record) {
         dayWorking = true;
         int currentDayIndex = this.dayStart;
         dayProgress = 0;
         dataPool = "";//清空dataPool
+        totalArea = 0f;
+        totalEnergy = 0f;
         while(currentDayIndex < this.dayEnd) {
             Debug.Log(">>current day index = " + currentDayIndex);
             var sunDir = sunManager.SetTimeAndUpdate(0, currentDayIndex, 0, sunManager.minute);
 
-            StartCoroutine("IE_DayOptimize",true);
+            StartCoroutine("IE_DayOptimize", record);
             yield return new WaitUntil(() => minuteWorking == false);
-            
-            currentDayIndex += this.dayGap;
-            dayProgress = 100 * (currentDayIndex - dayStart) / (dayEnd - dayStart);
-        }
 
+            dayProgress = 100 * (currentDayIndex - dayStart) / (dayEnd - dayStart);
+            currentDayIndex += this.dayGap;
+            
+        }
+        dayProgress = 100;
         Debug.Log("cal complete");
-        Debug.Log(dataPool);
 
         dayWorking = false;
     }

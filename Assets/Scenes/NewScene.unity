@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -189,8 +189,8 @@ Camera:
   m_GameObject: {fileID: 856343719}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -287,7 +287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &896424816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,7 +363,7 @@ RectTransform:
   m_Children:
   - {fileID: 1069892272}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -387,7 +387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &906131584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,7 +435,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &990070707
 GameObject:
@@ -621,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1077736567
 Light:
   m_ObjectHideFlags: 0
@@ -797,14 +797,40 @@ MonoBehaviour:
   minuteStart: 361
   minuteEnd: 1081
   minuteGap: 60
-  minuteProgress: 0
+  minuteProgress: 100
   dayStart: 0
   dayEnd: 365
   dayGap: 30
   dayProgress: 0
   structure: {fileID: 2071353376}
   sunManager: {fileID: 2014796295}
-  dataPool: 
+  record: 1
+  dataPool: '23,361,0.9980469,0.7699994,0.0292133,0
+
+    23,421,0.8945313,0.8243746,0.2892557,0.3079174
+
+    23,481,0.7949219,0.8424997,0.5238956,0.2703977
+
+    23,541,0.6210938,0.8424997,0.7615169,11.2508
+
+    23,601,0.5332031,0.8424997,0.9493787,73.89841
+
+    23,661,0.4921875,0.8424997,1.067646,178.2281
+
+    23,721,0.4785156,0.8424997,1.10779,301.2117
+
+    23,781,0.4921875,0.8424997,1.065722,365.1645
+
+    23,841,0.5351563,0.8424997,0.9440102,374.4675
+
+    23,901,0.625,0.8424997,0.7543924,249.5579
+
+    23,961,0.5957031,0.8243746,0.5002867,89.74498
+
+    23,1021,0.9121094,0.8243746,0.2810417,0
+
+'
+  summary_Info: 'totalArea : 8.27415| total Energy : 1644.102'
 --- !u!4 &1701604416
 Transform:
   m_ObjectHideFlags: 0
@@ -813,7 +839,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701604414}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0547054, y: 0.45876387, z: -0.30443737}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -917,9 +943,9 @@ MonoBehaviour:
   lon: 120
   lat: 32
   month: 0
-  day: 53
+  day: 23
   hour: 0
-  minute: 699
+  minute: 1021
 --- !u!4 &2014796296
 Transform:
   m_ObjectHideFlags: 0
@@ -927,13 +953,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2014796294}
-  m_LocalRotation: {x: 0.38806954, y: -0.059542146, z: 0.025133202, w: 0.9193613}
+  m_LocalRotation: {x: 0.0061820312, y: 0.54190516, z: -0.00398625, w: 0.8404075}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2071353375
 GameObject:
@@ -965,13 +991,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawGizmos: 1
-  calReflection: 0
+  calReflection: 1
   "\u5168\u5C40Gizmo\u5927\u5C0F": 0.02
   "\u57FA\u7840Gizmo\u989C\u8272": {r: 1, g: 1, b: 1, a: 1}
   "\u9690\u85CFGizmo\u989C\u8272": {r: 0.5, g: 0.5, b: 0.5, a: 1}
   "\u7535\u673AGizmo\u989C\u8272": {r: 1, g: 0, b: 0, a: 1}
   "\u9AD8\u4EAEGizmo\u989C\u8272": {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  "\u5782\u76F4\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.31054688
+  "\u5782\u76F4\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.9121094
   RootPos: {fileID: 1209127670}
   "\u6839\u90E8\u6709\u6548\u957F\u5EA6": 0.4814
   "\u6839\u90E8\u8FDE\u6746\u957F\u5EA6": 0.3
@@ -980,7 +1006,7 @@ MonoBehaviour:
   "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u7FFB\u8F6C": 0
   "\u6839\u90E8\u7535\u673A\u8DDD\u79BBrootStart\u7684\u8DDD\u79BB": 0.09
   "\u6839\u90E8\u7535\u673A\u8F68\u9053\u957F\u5EA6": 0.32
-  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.9150001
+  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.8243746
   "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u957F\u5EA6": 0.18
   "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u7FFB\u8F6C": 0
   "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EZ\u504F\u79FB": 0.06
@@ -1034,5 +1060,5 @@ Transform:
   - {fileID: 1209127670}
   - {fileID: 990070708}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
