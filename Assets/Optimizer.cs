@@ -19,7 +19,8 @@ public class Optimizer : MonoBehaviour {
     [Button("全年计算")]
     private void ClickEvent_AnnualOptimize() { StartCoroutine("IE_AnnualOptimize", record); }
 
-
+    [Button("停止计算")]
+    private void ClickEvent_StopAllCalculation() { StopAllCoroutines(); }
 
     [SerializeField] private float motor1Granularity;
     [SerializeField] private float granularityStep1 = 8f;
@@ -164,6 +165,10 @@ public class Optimizer : MonoBehaviour {
         Debug.Log("------------------------------");
         Debug.Log("共进行了"+counter +"次计算， 耗时" + (endTime - startTime).ToString()+"ms");
         structure.DrawGizmos = orgDrawGizmos;//恢复初始状态
+
+        //复位参数
+        minuteProgress = 0;
+        dayProgress = 0;
         return;
     }
 
@@ -339,13 +344,14 @@ public class Optimizer : MonoBehaviour {
             
             var success = SingleOptimize(out motor1pos, out motor2pos, out bestArea, false);
 
-            
+            //读取辐射数据
             if(DirectHavList == null) {
                 DirectHavList = FileOperator.ReadDirectHav();
             }
+            //计算数值
             bestRadiation = bestArea * GetAvgDirectHav(DirectHavList, sunManager.day, currentMinuteIndex,dayGap);
-            totalArea += bestArea;
-            totalEnergy += bestRadiation;
+            totalArea += bestArea * minuteGap / 60 * dayGap;
+            totalEnergy += bestRadiation * minuteGap /60 * dayGap;
             
             currentMinuteIndex += this.minuteGap;
             minuteProgress = 100*(currentMinuteIndex - minuteStart) / (minuteEnd - minuteStart);

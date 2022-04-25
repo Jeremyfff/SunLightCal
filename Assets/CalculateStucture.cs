@@ -8,7 +8,8 @@ using NaughtyAttributes;
 public class CalculateStucture : MonoBehaviour
 {
     [SerializeField] public bool DrawGizmos = true;
-    [SerializeField] private bool calReflection;
+    [SerializeField] private bool previewLightCast;
+    [SerializeField] private bool showInfoText = true;
 
     [HorizontalLine(height:0.5f)]
     [SerializeField] private float 全局Gizmo大小 = 0.005f;
@@ -131,7 +132,7 @@ public class CalculateStucture : MonoBehaviour
         var commonText = "Info Panel";
         
         if(sunManager == null) {
-            calReflection = false;
+            previewLightCast = false;
             commonText = commonText + "   Tip:运行后才能打开阳光计算";
         }
 
@@ -266,7 +267,7 @@ public class CalculateStucture : MonoBehaviour
         //=============================
 
         var PV_Plane = DrawPV();
-        if (calReflection) {
+        if (previewLightCast) {
             //var sunDir = new Vector3(0.1f, -1f, 1f);
             var sunDir = sunManager.GetSunDir();
             if (DrawGizmos) {
@@ -289,47 +290,60 @@ public class CalculateStucture : MonoBehaviour
             float area_C; float percentage_C;
             CalIntersectArea(castPoints_C, PV顶部.position, PV底部.position, out area_C, out percentage_C);
 
-            infoList.Add("反光板A光斑面积：" + area_A.ToString() + "， 利用率：" + percentage_A * 100 + "%");
-            infoList.Add("反光板B光斑面积：" + area_B.ToString() + "， 利用率：" + percentage_B * 100 + "%");
-            infoList.Add("反光板C光斑面积：" + area_C.ToString() + "， 利用率：" + percentage_C * 100 + "%");
-
-            infoList.Add("-----------------" );
+            if (showInfoText)
+            {
+                infoList.Add("反光板A光斑面积：" + area_A.ToString() + "， 利用率：" + percentage_A * 100 + "%");
+                infoList.Add("反光板B光斑面积：" + area_B.ToString() + "， 利用率：" + percentage_B * 100 + "%");
+                infoList.Add("反光板C光斑面积：" + area_C.ToString() + "， 利用率：" + percentage_C * 100 + "%");
+                infoList.Add("-----------------");
+            }
+            
 
             var refBoard1CastArea = calRefBoardCastArea(sunDir, board1Normal, Vector3.Distance(pt_A1, pt_A2) * Vector3.Distance(pt_A2, pt_A3));
             var refBoard2CastArea = calRefBoardCastArea(sunDir, board2Normal, Vector3.Distance(pt_B1, pt_B2) * Vector3.Distance(pt_B2, pt_B3));
             var refBoard3CastArea = calRefBoardCastArea(sunDir, board3Normal, Vector3.Distance(pt_C1, pt_C2) * Vector3.Distance(pt_C2, pt_C3));
 
-            infoList.Add("反光板A阳光投影面积：" + refBoard1CastArea.ToString());
-            infoList.Add("反光板B阳光投影面积：" + refBoard2CastArea.ToString());
-            infoList.Add("反光板C阳光投影面积：" + refBoard3CastArea.ToString());
-            infoList.Add("-----------------");
+            if (showInfoText)
+            {
+                infoList.Add("反光板A阳光投影面积：" + refBoard1CastArea.ToString());
+                infoList.Add("反光板B阳光投影面积：" + refBoard2CastArea.ToString());
+                infoList.Add("反光板C阳光投影面积：" + refBoard3CastArea.ToString());
+                infoList.Add("-----------------");
+            }
+
 
             var realCastArea1 = refBoard1CastArea * percentage_A;
             var realCastArea2 = refBoard2CastArea * percentage_B;
             var realCastArea3 = refBoard3CastArea * percentage_C;
 
-            infoList.Add("反光板A等效辐射面积：" + realCastArea1.ToString());
-            infoList.Add("反光板B等效辐射面积：" + realCastArea2.ToString());
-            infoList.Add("反光板C等效辐射面积：" + realCastArea3.ToString());
-            infoList.Add("-----------------");
-            infoList.Add("总等效辐射面积：" + (realCastArea1 + realCastArea2 + realCastArea3));
-            infoList.Add("-----------------");
+            if (showInfoText)
+            {
+                infoList.Add("反光板A等效辐射面积：" + realCastArea1.ToString());
+                infoList.Add("反光板B等效辐射面积：" + realCastArea2.ToString());
+                infoList.Add("反光板C等效辐射面积：" + realCastArea3.ToString());
+                infoList.Add("-----------------");
+                infoList.Add("总等效辐射面积：" + (realCastArea1 + realCastArea2 + realCastArea3));
+                infoList.Add("-----------------");
+            }
+
         }
 
 
 
 
-            
-            
-        
-        
-        long currentTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-        long fps = 1000 /(currentTime - lastTime);
-        lastTime = currentTime;
-        infoList.Add("FPS:" + fps);
 
 
-        ShowInfoOnScreen(top_left, -textPadding * 0.1f * sceneCamera.transform.up);
+        if (showInfoText)
+        {
+            long currentTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+            long fps = 1000 / (currentTime - lastTime);
+            lastTime = currentTime;
+            infoList.Add("FPS:" + fps);
+
+            ShowInfoOnScreen(top_left, -textPadding * 0.1f * sceneCamera.transform.up);
+        }
+        
+
 
         if (buildError) {
             Debug.Log("Build Error");
