@@ -4,44 +4,64 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
+public enum UpdateFrequency
+{
+    EveryMinute = 1,
+    EveryDay = 2,
+    
+}
+
 public class Optimizer : MonoBehaviour {
 
-    
+    private bool hasValidRange = false;
+
     [Button("计算有效范围")]
     private void ClickEvent_GetValidValue() { Debug.Log("calculating valid range");this.motor1ValidRange = new range(0.0f, 1.0f);this.motor2ValidRange = new range(0.0f, 0.0f);GetValidRange(out this.motor1ValidRange, out this.motor2ValidRange);}
 
-    [Button("进行单次计算")]
+    
+    [Button("进行单次计算")][EnableIf("hasValidRange")]
     private void ClickEvent_SingleOptimize() { float motor1pos;float motor2pos;float bestarea; SingleOptimize(out motor1pos, out motor2pos, out bestarea,true); }
 
-    [Button("单日计算")]
-    private void ClickEvent_DayOptimize() { StartCoroutine("IE_DayOptimize", record); }
+    [Button("单日计算")][EnableIf("hasValidRange")]
+    private void ClickEvent_DayOptimize() {globalStartTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000; StartCoroutine("IE_DayOptimize", record); }
 
-    [Button("全年计算")]
-    private void ClickEvent_AnnualOptimize() { StartCoroutine("IE_AnnualOptimize", record); }
+    [Button("全年计算")][EnableIf("hasValidRange")]
+    private void ClickEvent_AnnualOptimize() { globalStartTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000; StartCoroutine("IE_AnnualOptimize", record); }
 
-    [Button("停止计算")]
+    [Button("停止计算")][EnableIf("dayWorking")]
     private void ClickEvent_StopAllCalculation() { StopAllCoroutines(); }
 
-    [SerializeField] private float motor1Granularity;
-    [SerializeField] private float granularityStep1 = 8f;
-    [SerializeField] private float motor2Granularity;
-    [SerializeField] private float granularityStep2 = 8f;
+    [OnValueChanged("OVC")] [SerializeField]
+    private float motor1Granularity;
+    [OnValueChanged("OVC")] [SerializeField]
+    private float granularityStep1 = 8f;
+    [OnValueChanged("OVC")] [SerializeField]
+    private float motor2Granularity;
+    [OnValueChanged("OVC")] [SerializeField]
+    private float granularityStep2 = 8f;
 
     [HorizontalLine(height: 0.5f)]
-    [SerializeField] private int minuteStart;
-    [SerializeField] private int minuteEnd;
-    [SerializeField] private int minuteGap;
-    [ProgressBar("MinuteProgress",100,EColor.Green)]
-    [SerializeField] private int minuteProgress;
+    [SerializeField]
+    private int minuteStart;
+    [SerializeField]
+    private int minuteEnd;
+    [SerializeField]
+    private int minuteGap;
+    [ProgressBar("MinuteProgress",100,EColor.Green)][SerializeField]
+    private int minuteProgress;
     private bool minuteWorking;
 
 
     [HorizontalLine(height: 0.5f)]
-    [SerializeField] private int dayStart;
-    [SerializeField] private int dayEnd;
-    [SerializeField] private int dayGap;
+    [SerializeField]
+    private int dayStart;
+    [SerializeField]
+    private int dayEnd;
+     [SerializeField]
+    private int dayGap;
     [ProgressBar("DayProgress", 100, EColor.Green)]
-    [SerializeField] private int dayProgress;
+    [SerializeField]
+    private int dayProgress;
     private bool dayWorking;
 
     [HorizontalLine(height: 0.5f)]
@@ -51,9 +71,22 @@ public class Optimizer : MonoBehaviour {
     [HorizontalLine(height: 0.5f)]
     [SerializeField] private bool record;
 
+    [Dropdown("UpdateFrequencyValues")]
+    public int UpdateFrequency;
+
+    private DropdownList<int> UpdateFrequencyValues()
+    {
+        return new DropdownList<int>()
+        {
+            { "EveryMinute",   1 },
+            { "EveryDay",    2 },
+            { "SuperFastMode",    3 }
+
+        };
+    }
+
 
     [TextArea][SerializeField] private string dataPool;
-
     [TextArea][ReadOnly]public string summary_Info;
 
 
@@ -66,19 +99,23 @@ public class Optimizer : MonoBehaviour {
 
     float totalEnergy;
     float totalArea;
+
+    long globalStartTime;
     //
 
     private range motor1ValidRange = new range(0.0f,1.0f);
     private range motor2ValidRange = new range(0.0f,1.0f);
     private bool orgDrawGizmos;
+
     private float orgMotor1Pos;
     private float orgMotor2Pos;
 
     private List<float> DirectHavList;
+    
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -140,6 +177,7 @@ public class Optimizer : MonoBehaviour {
 
         }
 
+
         range2.min = motor2Pos;//将结果保存
         motor2Pos = 1;
         //反跑
@@ -164,6 +202,9 @@ public class Optimizer : MonoBehaviour {
         Debug.Log("motor2 valid range:" + range2.toString());
         Debug.Log("------------------------------");
         Debug.Log("共进行了"+counter +"次计算， 耗时" + (endTime - startTime).ToString()+"ms");
+
+        hasValidRange = true;
+
         structure.DrawGizmos = orgDrawGizmos;//恢复初始状态
 
         //复位参数
@@ -329,18 +370,20 @@ public class Optimizer : MonoBehaviour {
 
     IEnumerator IE_DayOptimize(bool record) {
         minuteWorking = true;//标记进入工作状态
+        
         int currentMinuteIndex = this.minuteStart;
         minuteProgress = 0;
         while (currentMinuteIndex < this.minuteEnd) {
-            Debug.Log("current minute index = " + currentMinuteIndex);
+            //Debug.Log("current minute index = " + currentMinuteIndex);
             var sunDir = sunManager.SetTimeAndUpdate(0, sunManager.day, 0, currentMinuteIndex);
-/*            if(Vector3.Dot(sunDir,Vector3.up)>0 || Vector3.Dot(sunDir, -Vector3.forward) > 0) {
+            if(Vector3.Dot(sunDir,Vector3.up)>0 || Vector3.Dot(sunDir,Vector3.back)>0) {
+                //Debug.Log("sun invalid");
                 //排除太阳位置不可能照射到的情况
                 currentMinuteIndex += this.minuteGap;
                 minuteProgress = 100 * (currentMinuteIndex - minuteStart) / (minuteEnd - minuteStart);
 
                 continue;
-            }*/
+            }
             
             var success = SingleOptimize(out motor1pos, out motor2pos, out bestArea, false);
 
@@ -355,14 +398,24 @@ public class Optimizer : MonoBehaviour {
             
             currentMinuteIndex += this.minuteGap;
             minuteProgress = 100*(currentMinuteIndex - minuteStart) / (minuteEnd - minuteStart);
-
+            //记录数据
             if (record) {
                 float[] values = { motor1pos, motor2pos, bestArea,bestRadiation };
                 dataPool += toStringCsv(sunManager.day, sunManager.minute, values);
-                summary_Info = "totalArea : " + totalArea + "| total Energy : " + totalEnergy;
             }
-            yield return null;
+            summary_Info = "totalArea : " + totalArea + "| total Energy : " + totalEnergy;
+            var costTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000 - globalStartTime;
+            summary_Info += "\n耗时：" + costTime / 1000 + "s";
+            if(UpdateFrequency == 1)
+            {
+                yield return null;
+            }
+            
 
+        }
+        if(UpdateFrequency != 1)
+        {
+            yield return null;
         }
         minuteProgress = 100;
         minuteWorking = false;
@@ -376,8 +429,19 @@ public class Optimizer : MonoBehaviour {
         dataPool = "";//清空dataPool
         totalArea = 0f;
         totalEnergy = 0f;
+
+        var orgPreviewLightCast = structure.previewLightCast;
+        var orgShowInfoText = structure.showInfoText;
+        var orgDrawGizmos = structure.DrawGizmos;
+        if(UpdateFrequency == 3)
+        {
+            structure.previewLightCast = false;
+            structure.showInfoText = false;
+            structure.DrawGizmos = false;
+        }
+
         while(currentDayIndex < this.dayEnd) {
-            Debug.Log(">>current day index = " + currentDayIndex);
+            //Debug.Log(">>current day index = " + currentDayIndex);
             var sunDir = sunManager.SetTimeAndUpdate(0, currentDayIndex, 0, sunManager.minute);
 
             StartCoroutine("IE_DayOptimize", record);
@@ -387,11 +451,17 @@ public class Optimizer : MonoBehaviour {
             currentDayIndex += this.dayGap;
             
         }
-        dayProgress = 100;
-        Debug.Log("cal complete");
 
+        dayProgress = 100;
+        
+        structure.previewLightCast = orgPreviewLightCast;
+        structure.showInfoText = orgShowInfoText;
+        structure.DrawGizmos = orgDrawGizmos;
         dayWorking = false;
+        Debug.Log("cal complete");
     }
+
+
 
     private string toStringCsv(int dayIndex,int minuteIndex,float[] values) {
         string result = dayIndex.ToString() + "," + minuteIndex.ToString();
@@ -412,7 +482,20 @@ public class Optimizer : MonoBehaviour {
 
         return SumDirectHav / count;
     }
+
+
+    public void OVC()
+    {
+        hasValidRange = false;
+    }
 }
+
+
+
+
+
+
+
 
     
 

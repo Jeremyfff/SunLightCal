@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635153326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -262,7 +262,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883599908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: -0.082}
+  m_LocalPosition: {x: 0, y: 0.44, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -797,16 +797,17 @@ MonoBehaviour:
   minuteStart: 361
   minuteEnd: 1081
   minuteGap: 60
-  minuteProgress: 0
+  minuteProgress: 16
   dayStart: 0
   dayEnd: 365
-  dayGap: 2
+  dayGap: 30
   dayProgress: 0
   structure: {fileID: 2071353376}
   sunManager: {fileID: 2014796295}
   record: 1
+  UpdateFrequency: 1
   dataPool: 
-  summary_Info: 'totalArea : 8.27415| total Energy : 1644.102'
+  summary_Info: 'totalArea : 1.172888| total Energy : 0'
 --- !u!4 &1701604416
 Transform:
   m_ObjectHideFlags: 0
@@ -921,7 +922,7 @@ MonoBehaviour:
   month: 0
   day: 0
   hour: 0
-  minute: 361
+  minute: 481
 --- !u!4 &2014796296
 Transform:
   m_ObjectHideFlags: 0
@@ -929,7 +930,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2014796294}
-  m_LocalRotation: {x: -0.0877132, y: -0.57214427, z: -0.061719317, w: 0.8131101}
+  m_LocalRotation: {x: 0.07604658, y: -0.4501489, z: 0.038511902, w: 0.88887554}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -967,51 +968,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawGizmos: 1
-  previewLightCast: 0
+  previewLightCast: 1
   showInfoText: 1
   "\u5168\u5C40Gizmo\u5927\u5C0F": 0.02
   "\u57FA\u7840Gizmo\u989C\u8272": {r: 1, g: 1, b: 1, a: 1}
   "\u9690\u85CFGizmo\u989C\u8272": {r: 0.5, g: 0.5, b: 0.5, a: 1}
   "\u7535\u673AGizmo\u989C\u8272": {r: 1, g: 0, b: 0, a: 1}
   "\u9AD8\u4EAEGizmo\u989C\u8272": {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  "\u5782\u76F4\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.9121094
+  "\u5782\u76F4\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.27148438
   RootPos: {fileID: 1209127670}
-  "\u6839\u90E8\u6709\u6548\u957F\u5EA6": 0.4814
-  "\u6839\u90E8\u8FDE\u6746\u957F\u5EA6": 0.3
+  "\u6839\u90E8\u6709\u6548\u957F\u5EA6": 0.44
+  "\u6839\u90E8\u8FDE\u6746\u957F\u5EA6": 0.42
   "\u6839\u90E8\u8FDE\u6746\u7FFB\u8F6C": 1
-  "\u6839\u90E8\u4E2D\u8F74\u4E0E\u6839\u90E8\u7535\u673A\u4E2D\u8F74\u4E4B\u95F4\u7684\u504F\u79FB\u8DDD\u79BB": 0.1
+  "\u6839\u90E8\u4E2D\u8F74\u4E0E\u6839\u90E8\u7535\u673A\u4E2D\u8F74\u4E4B\u95F4\u7684\u504F\u79FB\u8DDD\u79BB": 0.08
   "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u7FFB\u8F6C": 0
-  "\u6839\u90E8\u7535\u673A\u8DDD\u79BBrootStart\u7684\u8DDD\u79BB": 0.09
+  "\u6839\u90E8\u7535\u673A\u8DDD\u79BBrootStart\u7684\u8DDD\u79BB": 0.12
   "\u6839\u90E8\u7535\u673A\u8F68\u9053\u957F\u5EA6": 0.32
-  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.9150001
-  "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u957F\u5EA6": 0.18
+  "\u6839\u90E8\u7535\u673A\u4F4D\u7F6E\u767E\u5206\u6BD4": 0.41007876
+  "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u957F\u5EA6": 0.25
   "\u6839\u90E8\u7535\u673A\u8FDE\u6746\u7FFB\u8F6C": 0
-  "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EZ\u504F\u79FB": 0.06
-  "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EY\u504F\u79FB": 0.02
-  "link1End\u534A\u5F84": 0.1
+  "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EZ\u504F\u79FB": 0.072
+  "\u7B2C\u4E00\u6307\u8282\u5F00\u59CB\u4F4D\u7F6EY\u504F\u79FB": 0.0256
+  "link1End\u534A\u5F84": 0.184
   "\u7B2C\u4E00\u6307\u8282\u4E0Elink1End\u5939\u89D2": -90
   "\u7B2C\u4E00\u6307\u8282\u957F\u5EA6": 0.45
-  "\u7B2C\u4E00\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.5
-  "Link2Start\u534A\u5F84": 0.1
+  "\u7B2C\u4E00\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.475
+  "Link2Start\u534A\u5F84": 0.035
   "Link2Start\u7684\u89D2\u5EA6\u4F4D\u7F6E": -90
-  "link2End\u534A\u5F84": 0.1
+  "link2End\u534A\u5F84": 0.06
   "\u7B2C\u4E8C\u6307\u8282\u4E0Elink2End\u5939\u89D2": -90
   "\u7B2C\u4E8C\u6307\u8282\u957F\u5EA6": 0.45
-  "\u7B2C\u4E8C\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.5
-  "Link3Start\u534A\u5F84": 0.1
+  "\u7B2C\u4E8C\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.475
+  "Link3Start\u534A\u5F84": 0.035
   "Link3Start\u7684\u89D2\u5EA6\u4F4D\u7F6E": -90
-  "link3End\u534A\u5F84": 0.1
+  "link3End\u534A\u5F84": 0.12
   "\u7B2C\u4E09\u6307\u8282\u4E0Elink3End\u5939\u89D2": -90
-  "\u7B2C\u4E09\u6307\u8282\u957F\u5EA6": 0.4
-  "\u7B2C\u4E09\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.5
+  "\u7B2C\u4E09\u6307\u8282\u957F\u5EA6": 0.45
+  "\u7B2C\u4E09\u6307\u8282\u8FDE\u6746\u957F\u5EA6": 0.49
   "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u504F\u79FB\u8DDD\u79BB": 0.05
-  "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.05
-  "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
-  "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.1
-  "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
+  "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.06
+  "\u7B2C\u4E00\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.423
+  "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.105
+  "\u7B2C\u4E8C\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.423
   "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u504F\u79FB\u8DDD\u79BB": 0.05
-  "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.05
-  "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.42
+  "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u8FDE\u6746\u957F\u5EA6": 0.06
+  "\u7B2C\u4E09\u6307\u8282\u53CD\u5C04\u677F\u957F\u5EA6": 0.423
   "\u5782\u76F4\u7535\u673A\u8F68\u9053Start": {fileID: 1092486292}
   "\u5782\u76F4\u7535\u673A\u8F68\u9053End": {fileID: 1931218255}
   "PV\u5E95\u90E8": {fileID: 635153327}
@@ -1021,6 +1022,7 @@ MonoBehaviour:
   screenScale: 2.61
   textPadding: 0.5
   sunManager: {fileID: 2014796295}
+  optimizer: {fileID: 1701604415}
 --- !u!4 &2071353377
 Transform:
   m_ObjectHideFlags: 0

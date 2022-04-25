@@ -8,8 +8,8 @@ using NaughtyAttributes;
 public class CalculateStucture : MonoBehaviour
 {
     [SerializeField] public bool DrawGizmos = true;
-    [SerializeField] private bool previewLightCast;
-    [SerializeField] private bool showInfoText = true;
+    [SerializeField] public bool previewLightCast;
+    [SerializeField] public bool showInfoText = true;
 
     [HorizontalLine(height:0.5f)]
     [SerializeField] private float 全局Gizmo大小 = 0.005f;
@@ -23,70 +23,70 @@ public class CalculateStucture : MonoBehaviour
     
 
 
-    [SerializeField] private Transform RootPos;
+    [SerializeField] [OnValueChanged("OVC")] private Transform RootPos;
 
-    [SerializeField] private float 根部有效长度;
-    [SerializeField] private float 根部连杆长度;
-    [SerializeField] private bool 根部连杆翻转;
-    [SerializeField] private float 根部中轴与根部电机中轴之间的偏移距离;
-    [SerializeField] private bool 根部电机位置翻转;
-    [SerializeField] private float 根部电机距离rootStart的距离;
-    [SerializeField] private float 根部电机轨道长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 根部有效长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 根部连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private bool 根部连杆翻转;
+    [SerializeField] [OnValueChanged("OVC")] private float 根部中轴与根部电机中轴之间的偏移距离;
+    [SerializeField] [OnValueChanged("OVC")] private bool 根部电机位置翻转;
+    [SerializeField] [OnValueChanged("OVC")] private float 根部电机距离rootStart的距离;
+    [SerializeField] [OnValueChanged("OVC")] private float 根部电机轨道长度;
     [Range(0.0f,1.0f)]
     [SerializeField] private float 根部电机位置百分比;
-    [SerializeField] private float 根部电机连杆长度;
-    [SerializeField] private bool 根部电机连杆翻转;
+    [SerializeField] [OnValueChanged("OVC")] private float 根部电机连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private bool 根部电机连杆翻转;
     [HorizontalLine(height: 0.5f)]
-    [SerializeField] private float 第一指节开始位置Z偏移;
-    [SerializeField] private float 第一指节开始位置Y偏移;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节开始位置Z偏移;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节开始位置Y偏移;
     //以上两个偏移都是基于root的坐标系来的，是相对于rootEnd的偏移
 
-    [SerializeField] private float link1End半径;
-    [SerializeField] private float 第一指节与link1End夹角;
-    [SerializeField] private float 第一指节长度;
-    [SerializeField] private float 第一指节连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private float link1End半径;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节与link1End夹角;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节连杆长度;
 
     [HorizontalLine(height: 0.5f)]
-    [SerializeField] private float Link2Start半径;
-    [SerializeField] private float Link2Start的角度位置;
+    [SerializeField] [OnValueChanged("OVC")] private float Link2Start半径;
+    [SerializeField] [OnValueChanged("OVC")] private float Link2Start的角度位置;
 
-    [SerializeField] private float link2End半径;
-    [SerializeField] private float 第二指节与link2End夹角;
-    [SerializeField] private float 第二指节长度;
-    [SerializeField] private float 第二指节连杆长度;
-
-    [HorizontalLine(height: 0.5f)]
-    [SerializeField] private float Link3Start半径;
-    [SerializeField] private float Link3Start的角度位置;
-
-    [SerializeField] private float link3End半径;
-    [SerializeField] private float 第三指节与link3End夹角;
-    [SerializeField] private float 第三指节长度;
-    [SerializeField] private float 第三指节连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private float link2End半径;
+    [SerializeField] [OnValueChanged("OVC")] private float 第二指节与link2End夹角;
+    [SerializeField] [OnValueChanged("OVC")] private float 第二指节长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第二指节连杆长度;
 
     [HorizontalLine(height: 0.5f)]
-    [SerializeField] private float 第一指节反射板连杆偏移距离;
-    [SerializeField] private float 第一指节反射板连杆长度;
-    [SerializeField] private float 第一指节反射板长度;
+    [SerializeField] [OnValueChanged("OVC")] private float Link3Start半径;
+    [SerializeField] [OnValueChanged("OVC")] private float Link3Start的角度位置;
+
+    [SerializeField] [OnValueChanged("OVC")] private float link3End半径;
+    [SerializeField] [OnValueChanged("OVC")] private float 第三指节与link3End夹角;
+    [SerializeField] [OnValueChanged("OVC")] private float 第三指节长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第三指节连杆长度;
+
+    [HorizontalLine(height: 0.5f)]
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节反射板连杆偏移距离;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节反射板连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第一指节反射板长度;
 
 
-    [SerializeField] private float 第二指节反射板连杆长度;
-    [SerializeField] private float 第二指节反射板长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第二指节反射板连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第二指节反射板长度;
 
-    [SerializeField] private float 第三指节反射板连杆偏移距离;
-    [SerializeField] private float 第三指节反射板连杆长度;
-    [SerializeField] private float 第三指节反射板长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第三指节反射板连杆偏移距离;
+    [SerializeField] [OnValueChanged("OVC")] private float 第三指节反射板连杆长度;
+    [SerializeField] [OnValueChanged("OVC")] private float 第三指节反射板长度;
 
     
     private bool buildError = false;
 
     [HorizontalLine(height: 0.5f)]
-    [SerializeField] private Transform 垂直电机轨道Start;
-    [SerializeField] private Transform 垂直电机轨道End;
+    [SerializeField] [OnValueChanged("OVC")] private Transform 垂直电机轨道Start;
+    [SerializeField] [OnValueChanged("OVC")] private Transform 垂直电机轨道End;
 
-    [SerializeField] private Transform PV底部;
-    [SerializeField] private Transform PV顶部;
-    [SerializeField] private float PV宽度;
+    [SerializeField] [OnValueChanged("OVC")] private Transform PV底部;
+    [SerializeField] [OnValueChanged("OVC")] private Transform PV顶部;
+    [SerializeField] [OnValueChanged("OVC")] private float PV宽度;
 
 
     [HorizontalLine(height: 0.5f)]
@@ -95,6 +95,7 @@ public class CalculateStucture : MonoBehaviour
     [SerializeField] private float textPadding;
 
     [SerializeField] private SunManager sunManager;
+    [SerializeField] private Optimizer optimizer;
     private ArrayList infoList = new ArrayList();
     private long lastTime = 0;
     private int count = 0;
@@ -1076,6 +1077,11 @@ public class CalculateStucture : MonoBehaviour
             point += shift;
         }
 
+    }
+
+    private void OVC()
+    {
+        optimizer.OVC();
     }
 
 
